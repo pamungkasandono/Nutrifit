@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
     private var isBackPressed = false
     private lateinit var binding: ActivityMainBinding
 
+    // added new
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
