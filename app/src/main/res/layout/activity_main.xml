@@ -61,11 +61,11 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="184dp"
-                android:layout_height="155dp"
+                android:layout_width="170dp"
+                android:layout_height="140dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="25dp"
-                android:layout_marginEnd="0dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="7dp"
                 android:background="@drawable/ic_logo_beranda"
                 android:scaleType="fitCenter" />

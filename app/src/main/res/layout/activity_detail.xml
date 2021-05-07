@@ -85,13 +85,9 @@
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -130,13 +126,9 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -174,13 +166,9 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -219,13 +207,9 @@
 
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -263,13 +247,9 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -307,13 +287,9 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="51dp"
-                        android:layout_marginEnd="71dp"
-                        android:layout_marginBottom="6dp"
+                        style="@style/DetailItemLayout"
                         android:background="@drawable/bg_detail_item_list"
-                        android:orientation="horizontal">
+                        android:backgroundTint="@color/blue_500">
 
                         <RelativeLayout
                             android:layout_width="0dp"
