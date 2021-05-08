@@ -1,3 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Nutrifit</string>
+    <string name="started">Lets get started</string>
+    <string name="live_healthy">Live healthy</string>
+    <string name="with_nutrifit">with Nutrifit</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="with">with</string>
+    <string name="sign_up_with_google">Sign up with google</string>
 </resources>

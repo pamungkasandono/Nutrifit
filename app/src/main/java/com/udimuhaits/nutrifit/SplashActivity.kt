@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
 @Suppress("DEPRECATION")
-class Splash : AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -23,7 +23,8 @@ class Splash : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
         Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            val intent = Intent(this, ContainerActivity::class.java)
+            startActivity(intent)
             finish()
         }, 2000)
     }
