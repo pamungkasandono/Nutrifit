@@ -27,8 +27,8 @@ class SplashActivity : AppCompatActivity() {
         if (!isOpened) {
             sharedPreferences.edit().apply {
                 putBoolean("isOpened", true)
-                apply()
                 navigateToContainer()
+                apply()
             }
         } else {
             navigateToLogin()
