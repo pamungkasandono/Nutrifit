@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="10dp"
+    android:backgroundTint="@color/white"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/food_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/robotoregular"
+            android:text="@string/dummy_text_hamburger"
+            android:textColor="@color/black_700"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout1"
+            style="@style/LayoutListItemDetail.first"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/food_title">
+
+            <TextView
+                android:id="@+id/tv_serving"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_serving_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_serving"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_serving"
+                app:layout_constraintStart_toEndOf="@+id/tv_serving"
+                app:layout_constraintTop_toTopOf="@+id/tv_serving" />
+
+            <TextView
+                android:id="@+id/tv_data_serving_size"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_serving"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_serving" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            style="@style/LayoutListItemDetail.other"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout1">
+
+            <TextView
+                android:id="@+id/tv_calories"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_calories"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_calories"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_calories"
+                app:layout_constraintStart_toEndOf="@+id/tv_calories"
+                app:layout_constraintTop_toTopOf="@+id/tv_calories" />
+
+            <TextView
+                android:id="@+id/tv_data_calories"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_calories"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_calories" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            style="@style/LayoutListItemDetail.other"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+            <TextView
+                android:id="@+id/tv_carbo"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_carbo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_carbo"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_carbo"
+                app:layout_constraintStart_toEndOf="@+id/tv_carbo"
+                app:layout_constraintTop_toTopOf="@+id/tv_carbo" />
+
+            <TextView
+                android:id="@+id/tv_data_carbo"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_carbo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_carbo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            style="@style/LayoutListItemDetail.other"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+            <TextView
+                android:id="@+id/tv_protein"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_protein"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_protein"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_protein"
+                app:layout_constraintStart_toEndOf="@+id/tv_protein"
+                app:layout_constraintTop_toTopOf="@+id/tv_protein" />
+
+            <TextView
+                android:id="@+id/tv_data_protein"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_protein"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_protein" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout5"
+            style="@style/LayoutListItemDetail.other"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+            <TextView
+                android:id="@+id/tv_fat"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_fat_total"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_fat"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_fat"
+                app:layout_constraintStart_toEndOf="@+id/tv_fat"
+                app:layout_constraintTop_toTopOf="@+id/tv_fat" />
+
+            <TextView
+                android:id="@+id/tv_data_fat_total"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_fat"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_fat" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout6"
+            style="@style/LayoutListItemDetail.other"
+            android:background="@drawable/bg_detail_item_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+            <TextView
+                android:id="@+id/tv_cholesterol"
+                style="@style/TextViewListItemDetail"
+                android:text="@string/txt_cholesterol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_info_cholesterol"
+                style="@style/ImageViewListItemDetail"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_cholesterol"
+                app:layout_constraintStart_toEndOf="@+id/tv_cholesterol"
+                app:layout_constraintTop_toTopOf="@+id/tv_cholesterol" />
+
+            <TextView
+                android:id="@+id/tv_data_cholesterol"
+                style="@style/TextViewListItemDetail.nutriData"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_info_cholesterol"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_info_cholesterol" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="600dp"-->
+        <!--            android:background="@color/blue_500"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/constraintLayout6" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

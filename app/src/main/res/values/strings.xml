@@ -7,4 +7,16 @@
     <string name="get_started">Get Started</string>
     <string name="with">with</string>
     <string name="sign_up_with_google">Sign up with google</string>
+    <string name="dummy_size_100g">100g</string>
+    <string name="nutrition_placeholder_in_g">%s g</string>
+    <string name="nutrition_placeholder_in_mg">%s mg</string>
+    <string name="nutrition_placeholder_in_cal">%s cal</string>
+    <string name="txt_calories">Calories</string>
+    <string name="txt_protein">Protein</string>
+    <string name="txt_serving_size">Serving Size</string>
+    <string name="txt_carbo">Carbohydrates Total</string>
+    <string name="txt_fat_total">Fat Total</string>
+    <string name="dummy_text_hamburger">Hamburger</string>
+    <string name="img_desc_info_button">Info button</string>
+    <string name="txt_cholesterol">Cholesterol</string>
 </resources>

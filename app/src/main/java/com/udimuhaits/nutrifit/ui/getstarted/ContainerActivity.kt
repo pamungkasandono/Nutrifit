@@ -1,7 +1,8 @@
-package com.udimuhaits.nutrifit
+package com.udimuhaits.nutrifit.ui.getstarted
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.udimuhaits.nutrifit.R
 
 class ContainerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

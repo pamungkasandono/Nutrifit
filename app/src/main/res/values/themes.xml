@@ -35,9 +35,73 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">50dp</item>
-        <item name="android:layout_marginEnd">70dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
         <item name="android:layout_marginBottom">6dp</item>
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingEnd">5dp</item>
+    </style>
+
+    <style name="TextViewItemDetailCompositionSize">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:textColor">@color/black_700</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextViewItemDetailName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_700</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ImageViewItemDetailBtnInfo">
+        <item name="android:layout_width">13dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:src">@drawable/ic_info</item>
+    </style>
+
+    <style name="LayoutListItemDetail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
+        <item name="android:paddingStart">7dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingEnd">7dp</item>
+        <item name="android:paddingBottom">3dp</item>
+    </style>
+
+    <style name="LayoutListItemDetail.first">
+        <item name="android:layout_marginTop">13dp</item>
+    </style>
+
+    <style name="LayoutListItemDetail.other">
+        <item name="android:layout_marginTop">3dp</item>
+    </style>
+
+    <style name="TextViewListItemDetail">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black_700</item>
+    </style>
+
+    <style name="TextViewListItemDetail.nutriData">
+        <item name="android:text">@string/dummy_size_100g</item>
+        <item name="android:textAlignment">textEnd</item>
+    </style>
+
+    <style name="ImageViewListItemDetail">
+        <item name="android:layout_width">13dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:contentDescription">@string/img_desc_info_button</item>
+        <item name="android:src">@drawable/ic_info</item>
     </style>
 </resources>

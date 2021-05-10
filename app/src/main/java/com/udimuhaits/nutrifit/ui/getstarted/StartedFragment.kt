@@ -1,4 +1,4 @@
-package com.udimuhaits.nutrifit
+package com.udimuhaits.nutrifit.ui.getstarted
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.udimuhaits.nutrifit.databinding.FragmentStartedBinding
+import com.udimuhaits.nutrifit.ui.login.LoginActivity
 
 class StartedFragment : Fragment() {
 

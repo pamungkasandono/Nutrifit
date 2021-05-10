@@ -1,4 +1,4 @@
-package com.udimuhaits.nutrifit
+package com.udimuhaits.nutrifit.ui.splash
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.udimuhaits.nutrifit.R
+import com.udimuhaits.nutrifit.ui.getstarted.ContainerActivity
+import com.udimuhaits.nutrifit.ui.login.LoginActivity
 
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
@@ -19,13 +22,13 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
-
         val isOpened = sharedPreferences.getBoolean("isOpened", false)
+
         if (!isOpened) {
             sharedPreferences.edit().apply {
                 putBoolean("isOpened", true)
-                navigateToContainer()
                 apply()
+                navigateToContainer()
             }
         } else {
             navigateToLogin()
