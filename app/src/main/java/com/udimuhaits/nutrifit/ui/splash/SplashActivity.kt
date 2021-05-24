@@ -9,7 +9,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.udimuhaits.nutrifit.R
+import com.udimuhaits.nutrifit.ui.form.FormActivity
 import com.udimuhaits.nutrifit.ui.getstarted.ContainerActivity
+import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginActivity
 
 @Suppress("DEPRECATION")
@@ -21,17 +23,30 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
-        val isOpened = sharedPreferences.getBoolean("isOpened", false)
+        sharedPreferences = this.getSharedPreferences("sharedPrefStarted", Context.MODE_PRIVATE)
+        val isOpened = sharedPreferences.getBoolean("alreadyGettingStarted", false)
+        val isStarted = sharedPreferences.getBoolean("isStarted", false)
+
+        sharedPreferences = this.getSharedPreferences("sharedPrefLogin", Context.MODE_PRIVATE)
+        val isLogin = sharedPreferences.getBoolean("isLogin", false)
+
 
         if (!isOpened) {
-            sharedPreferences.edit().apply {
-                putBoolean("isOpened", true)
+            sharedPreferences.apply {
                 navigateToContainer()
+            }
+        } else if (!isStarted){
+            sharedPreferences.edit().apply {
+                putBoolean("isStarted", true)
+                navigateToLogin()
                 apply()
             }
-        } else {
-            navigateToLogin()
+        } else if (!isLogin) {
+            sharedPreferences.edit().apply {
+                putBoolean("isLogin", true)
+                navigateToForm()
+                apply()
+            }
         }
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -48,7 +63,6 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             val intent = Intent(this, ContainerActivity::class.java)
             startActivity(intent)
-            finish()
         }, 2000)
     }
 
@@ -56,7 +70,13 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish()
+        }, 2000)
+    }
+
+    private fun navigateToForm() {
+        Handler().postDelayed({
+            val intent = Intent(this, FormActivity::class.java)
+            startActivity(intent)
         }, 2000)
     }
 }
