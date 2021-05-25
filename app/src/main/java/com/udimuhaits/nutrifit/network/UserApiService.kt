@@ -1,12 +1,10 @@
 package com.udimuhaits.nutrifit.network
 
-import android.net.Uri
 import com.udimuhaits.nutrifit.data.UserBody
 import com.udimuhaits.nutrifit.data.UserProfile
 import com.udimuhaits.nutrifit.data.UserResponse
 import retrofit2.Call
 import retrofit2.http.*
-import java.util.*
 
 interface UserApiService {
     @GET("google/")
@@ -29,5 +27,5 @@ interface UserApiService {
         @Field("birth_date") birthDate: String?,
         @Field("height") height: Int?,
         @Field("weight") weight: Int?,
-    ) : Call<UserProfile>
+    ): Call<UserProfile>
 }

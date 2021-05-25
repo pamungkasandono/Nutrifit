@@ -29,4 +29,7 @@
     <string name="weight">Weight</string>
     <string name="dialog_title">Save Profile</string>
     <string name="message_save">Are you sure to proceed this data? You can always edit your data in profile.</string>
+    <string name="text_sudah_makan_apa_hari_ini">Sudah makan apa hari ini?</string>
+
+    <!--    <string name="default_web_client_id">ad</string>-->
 </resources>
