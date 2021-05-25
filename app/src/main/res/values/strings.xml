@@ -1,8 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Nutrifit</string>
     <string name="started">Lets get started</string>
-    <string name="live_healthy">Live healthy</string>
-    <string name="with_nutrifit">with Nutrifit</string>
+    <string name="live_healthy">Live healthy\nwith Nutrifit</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
     <string name="with">with</string>
@@ -19,4 +18,15 @@
     <string name="dummy_text_hamburger">Hamburger</string>
     <string name="img_desc_info_button">Info button</string>
     <string name="txt_cholesterol">Cholesterol</string>
+    <string name="login_content">Simple, Hight Class, Elegant, And User Friendly.</string>
+    <string name="introduction_content">Simple, high-class, elegant with easy-to-use tools. Nutrifit is here to help you in checking the nutrition of your food and other supporting features.</string>
+    <string name="get_started_content">Take care of your dietary nutrition starting from yourself with Nutrifit.</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="dialog_title">Save Profile</string>
+    <string name="message_save">Are you sure to proceed this data? You can always edit your data in profile.</string>
 </resources>

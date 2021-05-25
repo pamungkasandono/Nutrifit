@@ -6,22 +6,34 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.udimuhaits.nutrifit.databinding.ActivityMainBinding
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
+import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
+import com.udimuhaits.nutrifit.ui.login.LoginActivity
+import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 
 class HomeActivity : AppCompatActivity() {
-    private var isBackPressed = false
-    private lateinit var binding: ActivityMainBinding
 
-    // added new
+    private lateinit var binding: ActivityHomeBinding
+    private var isBackPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var asdd: List<String> = listOf()
+
+        val image = intent.getStringExtra("imageProfile")
+        Glide
+            .with(this)
+            .load(image)
+            .into(binding.imgProfile)
+
 
 //        binding.searchBox.setText("1 serving of Pizza 1 serving of Water 1 serving of Noodles 1 serving of Cake 1 serving of Meat balls")
 //        binding.searchBox.setText("Pizza Water Noodles Cake Ramen")

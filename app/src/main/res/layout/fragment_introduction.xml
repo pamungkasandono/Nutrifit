@@ -29,24 +29,15 @@
         app:layout_constraintTop_toBottomOf="@id/img_healthy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    <TextView
-        android:id="@+id/tv_with_nutrifit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/with_nutrifit"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_live_healthy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et doloremagna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        app:layout_constraintTop_toBottomOf="@id/tv_with_nutrifit"
+        android:layout_height="wrap_content"
+        android:text="@string/introduction_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_live_healthy"
         android:layout_marginTop="8dp"/>
 
     <ImageView
