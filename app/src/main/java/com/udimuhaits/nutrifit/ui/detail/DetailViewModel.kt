@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.udimuhaits.nutrifit.data.CNEntity
 import com.udimuhaits.nutrifit.data.CalorieNinjasResponse
-import com.udimuhaits.nutrifit.network.CNApiConfig
+import com.udimuhaits.nutrifit.network.NutrifitApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +33,7 @@ class DetailViewModel : ViewModel() {
 //        val query = setQueries // wajib di kasih koma untuk menghindari kesalahan
 //        _isLoading.value = false
 
-        val clint = CNApiConfig.getApiService().getSearchResult(query)
+        val clint = NutrifitApiConfig.getCNApiService().getSearchResult(query)
 //        val calorieNinjasResult = MutableLiveData<List<CNEntity>>()
 
         clint.enqueue(object : Callback<CalorieNinjasResponse> {

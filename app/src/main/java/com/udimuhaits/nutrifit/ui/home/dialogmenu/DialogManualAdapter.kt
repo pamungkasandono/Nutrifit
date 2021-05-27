@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.udimuhaits.nutrifit.databinding.ItemMenuManualBinding
+import com.udimuhaits.nutrifit.utils.toast
 
 class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupViewHolder>() {
     private val mData = ArrayList<ListManualEntity>()
@@ -55,7 +56,7 @@ class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupView
                 imageButton2.setOnClickListener {
                     val increaseValue = listManualEntity.value + 1
                     if (increaseValue > 10) {
-                        Toast.makeText(root.context, "maximum porsi", Toast.LENGTH_SHORT).show()
+                        root.context.toast("maximum porsi")
                     } else {
                         dataChangeListener.onValueChange(
                             adapterPosition, listManualEntity.name, increaseValue
@@ -66,8 +67,7 @@ class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupView
                 imageButton3.setOnClickListener {
                     val decreaseValue = listManualEntity.value - 1
                     if (decreaseValue < 1) {
-                        Toast.makeText(root.context, "minimum portion is 1", Toast.LENGTH_SHORT)
-                            .show()
+                        root.context.toast("minimum portion is 1")
                     } else {
                         dataChangeListener.onValueChange(
                             adapterPosition, listManualEntity.name, decreaseValue

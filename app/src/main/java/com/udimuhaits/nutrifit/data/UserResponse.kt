@@ -1,8 +1,6 @@
 package com.udimuhaits.nutrifit.data
 
-import android.net.Uri
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class UserResponse(
     @field:SerializedName("user_id")

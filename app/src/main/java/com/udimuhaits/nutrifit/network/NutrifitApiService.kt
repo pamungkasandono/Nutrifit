@@ -1,12 +1,14 @@
 package com.udimuhaits.nutrifit.network
 
+import com.udimuhaits.nutrifit.data.ResponseImageML
 import com.udimuhaits.nutrifit.data.UserBody
 import com.udimuhaits.nutrifit.data.UserProfile
 import com.udimuhaits.nutrifit.data.UserResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface UserApiService {
+interface NutrifitApiService {
     @GET("google/")
     fun getLogin(
         @Query("token") token: String?
@@ -28,4 +30,10 @@ interface UserApiService {
         @Field("height") height: Int?,
         @Field("weight") weight: Int?,
     ): Call<UserProfile>
+
+    @Multipart
+    @POST("api/uploadimage/prediction/yolov5s6")
+    fun uploadImage(
+        @Part image_url: MultipartBody.Part
+    ): Call<ResponseImageML>
 }

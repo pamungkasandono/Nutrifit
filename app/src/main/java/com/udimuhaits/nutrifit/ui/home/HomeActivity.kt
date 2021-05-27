@@ -1,6 +1,8 @@
 package com.udimuhaits.nutrifit.ui.home
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,42 +10,81 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
+import com.udimuhaits.nutrifit.databinding.DialogChooseImageBinding
 import com.udimuhaits.nutrifit.databinding.DialogMenuManualBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
-import com.udimuhaits.nutrifit.utils.Global.forcePortrait
+import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
+import com.udimuhaits.nutrifit.utils.forcePortrait
+import com.udimuhaits.nutrifit.utils.toast
+import com.udimuhaits.nutrifit.utils.toastLong
+import com.udimuhaits.nutrifit.utils.writeIsGranted
 
+@SuppressLint("SetTextI18n")
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
-
     private lateinit var binding: ActivityHomeBinding
     private var isBackPressed = false
-
     private val arrayListManual = ArrayList<ListManualEntity>()
-    private val limitTotalMenu = 5
+    private val limitTotalMenu = 15
+    private lateinit var menuManualBinding: DialogMenuManualBinding
+    private val dialogManualAdapter = DialogManualAdapter()
+    private lateinit var dialog: AlertDialog
+    private var setDisabledState: Boolean = false
+
+    companion object {
+        const val FROM_DETAIL = 100
+        const val FROM_IMAGE_DETECTION = 200
+        const val PICK_IMAGE = 201
+        const val TAKE_PICTURE = 202
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var asdd: List<String> = listOf()
+        if (this.writeIsGranted()) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(
+                this, arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ), 10
+            )
+/*
+            Snackbar.make(
+                uploadBinding.root, "Camera not have permission", Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction("How") {
+                    Toast.makeText(
+                        this,
+                        "Anda perlu buka perngaturan -> aplikasi -> Nutrifit -> Izin -> Penyimpanan",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }.show()
+*/
+        }
 
+        arrayListManual.add(ListManualEntity("cake", 2))
+        arrayListManual.add(ListManualEntity("rice", 1))
+        arrayListManual.add(ListManualEntity("fries", 1))
         val imageUser = intent.getStringExtra("imageProfile")
         Glide.with(this)
             .load(imageUser)
             .into(binding.imgProfile)
 
-        // perubahan
+        // fix portrait
         forcePortrait(this)
 
         var visibilityButtonState = true
@@ -59,37 +100,53 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-//        binding.searchBox.setText("1 serving of Pizza 1 serving of Water 1 serving of Noodles 1 serving of Cake 1 serving of Meat balls")
-//        binding.searchBox.setText("Pizza Water Noodles Cake Ramen")
-
         binding.btnSearch.setOnClickListener {
-//            val serving = " 1 serving of "
-//            val searchData = binding.searchBox.text
-//            val dataQuery = searchData.toString()
-//            asdd = dataQuery.split(" ")
-//            var mDataQuery = ""
-//            asdd.forEach {
-//                mDataQuery += serving + it
-//            }
-//
-//            Log.d("asdasd home", mDataQuery)
-//
-
             manualDialog(arrayListManual)
         }
 
         binding.searchBox.setOnClickListener {
-            Toast.makeText(this, "Search box", Toast.LENGTH_SHORT).show()
+            this.toast("Search box")
             manualDialog(arrayListManual)
         }
 
+        binding.selectImage.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this).create()
+            alertDialog.setTitle("Choose your picture from")
+            val dialogImageOptionsBinding =
+                DialogChooseImageBinding.inflate(LayoutInflater.from(this))
+            alertDialog.setView(dialogImageOptionsBinding.root)
+
+            dialogImageOptionsBinding.selectGallery.setOnClickListener {
+                if (this.writeIsGranted()) {
+                    // Permission is not granted
+                    this.toastLong("To use this feature you have to grant the permission!")
+                } else {
+                    Intent(this, ImageDetection::class.java).apply {
+                        this.putExtra("youChoose", PICK_IMAGE)
+                        startActivityForResult(this, FROM_IMAGE_DETECTION)
+                    }
+                }
+                alertDialog.dismiss()
+            }
+
+            dialogImageOptionsBinding.selectCamera.setOnClickListener {
+                if (this.writeIsGranted()) {
+                    // Permission is not granted
+                    this.toastLong("To use this feature you have to grant the permission!")
+                } else {
+                    Intent(this, ImageDetection::class.java).apply {
+                        this.putExtra("youChoose", TAKE_PICTURE)
+                        startActivityForResult(this, FROM_IMAGE_DETECTION)
+                    }
+                }
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
+
+        }
         //./ end of perubahan
     }
-
-    @SuppressLint("SetTextI18n")
-    private lateinit var menuManualBinding: DialogMenuManualBinding
-    private val dialogManualAdapter = DialogManualAdapter()
-    private lateinit var dialog: AlertDialog
 
     private fun manualDialog(arrayManualList: ArrayList<ListManualEntity>) {
         val dialogBuilder = AlertDialog.Builder(this)
@@ -109,7 +166,15 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             dialogManualAdapter.setData(arrayManualList)
             dialogManualAdapter.notifyDataSetChanged()
         } else {
-            Toast.makeText(this, "No data yet.", Toast.LENGTH_SHORT).show()
+            this.toast("No data yet.")
+        }
+
+        // cek jika array penuh
+        if (arrayListManual.size >= limitTotalMenu) {
+            menuManualBinding.inputMenuSection.apply {
+                this.visibility = View.INVISIBLE
+                this.animate().alpha(0f).duration = 200
+            }
         }
 
         // set disable state
@@ -136,13 +201,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         dialogManualAdapter.setOnDeleteListener(object : DialogManualAdapter.InterfaceListener {
             override fun onDeleteClick(position: Int) {
                 if (arrayManualList.size >= limitTotalMenu) {
-                    Toast.makeText(this@HomeActivity, "now max", Toast.LENGTH_SHORT).show()
+                    this@HomeActivity.toast("maximum reached")
                     menuManualBinding.inputMenuSection.apply {
                         this.visibility = View.VISIBLE
                         this.animate().alpha(1f).duration = 200
                     }
                 }
-                Toast.makeText(this@HomeActivity, "now max tp boong", Toast.LENGTH_SHORT).show()
                 arrayManualList.removeAt(position)
                 dialogManualAdapter.setData(arrayManualList)
                 dialogManualAdapter.notifyDataSetChanged()
@@ -175,22 +239,37 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     result.isNotEmpty() -> {
                         Intent(this, DetailActivity::class.java).apply {
                             putExtra(DetailActivity.QUERY, result)
-                            startActivity(this)
+                            putExtra(DetailActivity.WITH_IMAGE, false)
+                            startActivityForResult(this, FROM_DETAIL)
                         }
                     }
-                    else -> Toast.makeText(
-                        this, "You haven't eat anything yet?", Toast.LENGTH_SHORT
-                    ).show()
+                    else -> this.toast("You haven't eat anything yet?")
                 }
-                Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
-
                 dialog.dismiss()
-                Toast.makeText(this, arrayListManual.size.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private var handle: Boolean = false
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            Log.d("asdasd requestcode", requestCode.toString())
+            when (requestCode) {
+                FROM_DETAIL -> {
+                    if (data?.getBooleanExtra("isSuccess", false) == true) {
+                        this.toast("success")
+                        arrayListManual.clear()
+                        dialogManualAdapter.setData(arrayListManual)
+                        dialogManualAdapter.notifyDataSetChanged()
+                    }
+                }
+                FROM_IMAGE_DETECTION -> {
+                    val status = data?.getBooleanExtra("isSuccess", false)
+                    this.toast("from image $status")
+                }
+            }
+        }
+    }
 
     private fun setDisable(): Boolean {
         // set default
@@ -219,7 +298,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                                 ColorStateList.valueOf(Color.rgb(76, 239, 155))
                         }
                     }
-                    handle = true
+                    setDisabledState = true
                 } else {
                     menuManualBinding.btnAddNewItem.apply {
                         this.post {
@@ -233,11 +312,11 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                                 ColorStateList.valueOf(Color.GRAY)
                         }
                     }
-                    handle = false
+                    setDisabledState = false
                 }
             }
         })
-        return handle
+        return setDisabledState
     }
 
     private fun addNewItem(): Boolean {
@@ -250,8 +329,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         if (check) {
-            Toast.makeText(this@HomeActivity, "Menu $text sudah ada.", Toast.LENGTH_SHORT)
-                .show()
+            this.toast("Menu $text sudah ada.")
             return false
         } else {
             arrayListManual.add(ListManualEntity(text.toString(), 1))
@@ -264,10 +342,10 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
         if (arrayListManual.size >= limitTotalMenu) {
             menuManualBinding.inputMenuSection.apply {
-                this.visibility = View.GONE
+                this.visibility = View.INVISIBLE
                 this.animate().alpha(0f).duration = 200
             }
-            Toast.makeText(this, "maximum menu reached", Toast.LENGTH_SHORT).show()
+            this.toast("maximum menu reached")
         }
         return true
     }
@@ -286,7 +364,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         isBackPressed = true
-        Toast.makeText(this, "Tekan sekali lagi untuk kembali", Toast.LENGTH_SHORT).show()
+        this.toast("Tekan sekali lagi untuk kembali")
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }
+
+

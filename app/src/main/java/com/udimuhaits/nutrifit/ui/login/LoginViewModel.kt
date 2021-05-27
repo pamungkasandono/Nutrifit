@@ -7,11 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.udimuhaits.nutrifit.data.UserBody
 import com.udimuhaits.nutrifit.data.UserProfile
 import com.udimuhaits.nutrifit.data.UserResponse
-import com.udimuhaits.nutrifit.network.UserApiConfig
+import com.udimuhaits.nutrifit.network.NutrifitApiConfig
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Callback
-import java.util.*
 
 class LoginViewModel : ViewModel() {
 
@@ -31,7 +30,7 @@ class LoginViewModel : ViewModel() {
 
     fun postUser(username: String?, email: String?, profilePic: String?): LiveData<UserResponse> {
         _isLoading.value = true
-        UserApiConfig.postUserApiService().postLogin(username, email, profilePic).enqueue(object : Callback<UserResponse> {
+        NutrifitApiConfig.postUserApiService().postLogin(username, email, profilePic).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -53,7 +52,7 @@ class LoginViewModel : ViewModel() {
 
     fun getUser(token: String?): LiveData<UserBody> {
         _isLoading.value = true
-        UserApiConfig.getUserApiService(token).getLogin(token).enqueue(object : Callback<UserBody> {
+        NutrifitApiConfig.getNutrifitApiService(token).getLogin(token).enqueue(object : Callback<UserBody> {
             override fun onResponse(call: Call<UserBody>, response: Response<UserBody>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -74,7 +73,7 @@ class LoginViewModel : ViewModel() {
 
     fun putUser(id: Int?, token: String?, birthDate: String?, height: Int?, weight: Int?): LiveData<UserProfile> {
         _isLoading.value = true
-        UserApiConfig.getUserApiService(token).putUser(id, birthDate, height, weight).enqueue(object :Callback<UserProfile> {
+        NutrifitApiConfig.getNutrifitApiService(token).putUser(id, birthDate, height, weight).enqueue(object :Callback<UserProfile> {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {

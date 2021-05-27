@@ -30,6 +30,10 @@
     <string name="dialog_title">Save Profile</string>
     <string name="message_save">Are you sure to proceed this data? You can always edit your data in profile.</string>
     <string name="text_sudah_makan_apa_hari_ini">Sudah makan apa hari ini?</string>
+    <string name="str_result_s">Result : %s</string>
+    <string name="txt_zero_in_mg">0mg</string>
+    <string name="txt_zero_in_g">0g</string>
+    <string name="txt_zero_in_cal">0cal</string>
 
     <!--    <string name="default_web_client_id">ad</string>-->
 </resources>

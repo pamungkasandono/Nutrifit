@@ -12,6 +12,5 @@ interface CNApiServices {
     @GET("nutrition/")
     fun getSearchResult(
         @Query("query") query: String
-//        @Path("query") query: String
     ): Call<CalorieNinjasResponse> // ini harus menggunakan data response
 }

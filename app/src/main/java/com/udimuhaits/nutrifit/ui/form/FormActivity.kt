@@ -3,12 +3,12 @@ package com.udimuhaits.nutrifit.ui.form
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -19,6 +19,7 @@ import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
+import com.udimuhaits.nutrifit.utils.SET_NUTRIFIT_ACCESS_TOKEN
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,7 +40,7 @@ class FormActivity : AppCompatActivity() {
         gsc = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
         fAuth = FirebaseAuth.getInstance()
         dateFormatter = SimpleDateFormat("yyyy-MM-dd")
-        
+
         val account = fAuth.currentUser
         val aUsername = account?.displayName
         val aEmail = account?.email
@@ -50,7 +51,11 @@ class FormActivity : AppCompatActivity() {
             ViewModelProvider.NewInstanceFactory()
         )[LoginViewModel::class.java]
 
-        viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, {users ->
+        viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+
+            // set to global token
+            SET_NUTRIFIT_ACCESS_TOKEN = users.accessToken.toString()
+
             users.apply {
                 binding.edtUsername.setText(username)
                 binding.edtEmail.setText(email)
@@ -60,7 +65,7 @@ class FormActivity : AppCompatActivity() {
                     .into(binding.imgProfile)
             }
 
-            viewModel.getUser(users.accessToken).observe(this, {body ->
+            viewModel.getUser(users.accessToken).observe(this, { body ->
                 body.apply {
                     Toast.makeText(applicationContext, detail, Toast.LENGTH_SHORT).show()
                     Toast.makeText(applicationContext, status, Toast.LENGTH_SHORT).show()
@@ -71,12 +76,20 @@ class FormActivity : AppCompatActivity() {
                 val birthDate = binding.edtDate.text.toString()
                 val height = binding.edtHeight.text.toString()
                 val weight = binding.edtWeight.text.toString()
-                showAlertDialog(users.userId, users.accessToken, birthDate, height.toInt(), weight.toInt(), users.profilePic)
+                showAlertDialog(
+                    users.userId,
+                    users.accessToken,
+                    birthDate,
+                    height.toInt(),
+                    weight.toInt(),
+                    users.profilePic
+                )
             }
         })
 
         viewModel.isLoading.observe(this, { loading ->
-            binding.progressBar.visibility = if (loading) android.view.View.VISIBLE else android.view.View.GONE
+            binding.progressBar.visibility =
+                if (loading) android.view.View.VISIBLE else android.view.View.GONE
         })
 
         binding.edtDate.setOnClickListener {
@@ -89,11 +102,17 @@ class FormActivity : AppCompatActivity() {
 
     private fun showDateDialog() {
         val calendar = Calendar.getInstance()
-        datePickerDialog = DatePickerDialog(this, { view, year, month, dayOfMonth ->
-            val newDate = Calendar.getInstance()
-            newDate.set(year, month, dayOfMonth)
-            binding.edtDate.setText(dateFormatter.format(newDate.time))
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        datePickerDialog = DatePickerDialog(
+            this,
+            { view, year, month, dayOfMonth ->
+                val newDate = Calendar.getInstance()
+                newDate.set(year, month, dayOfMonth)
+                binding.edtDate.setText(dateFormatter.format(newDate.time))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
         datePickerDialog.show()
     }
 
@@ -106,7 +125,8 @@ class FormActivity : AppCompatActivity() {
                 val height = binding.edtHeight.text
                 val weight = binding.edtWeight.text
 
-                binding.btnSaveProfile.isEnabled = !birthDate?.isEmpty()!! && !height?.isEmpty()!! && !weight?.isEmpty()!!
+                binding.btnSaveProfile.isEnabled =
+                    !birthDate?.isEmpty()!! && !height?.isEmpty()!! && !weight?.isEmpty()!!
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -117,7 +137,14 @@ class FormActivity : AppCompatActivity() {
         binding.btnSaveProfile.isEnabled = false
     }
 
-    private fun showAlertDialog(userId: Int?, token: String?, birthDate: String?, height: Int?, weight: Int?, imageProfile: String?) {
+    private fun showAlertDialog(
+        userId: Int?,
+        token: String?,
+        birthDate: String?,
+        height: Int?,
+        weight: Int?,
+        imageProfile: String?
+    ) {
         val viewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
@@ -128,14 +155,18 @@ class FormActivity : AppCompatActivity() {
         builder.setMessage(R.string.message_save)
         builder.setIcon(R.drawable.ic_save)
         builder.setPositiveButton("Yes") { dialogInterface, which ->
-            Toast.makeText(applicationContext, "Welcome to nutirift. Start your better live journey right now!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                applicationContext,
+                "Welcome to nutirift. Start your better live journey right now!",
+                Toast.LENGTH_SHORT
+            ).show()
             viewModel.putUser(userId, token, birthDate, height, weight)
             val intent = Intent(this, HomeActivity::class.java)
             intent.putExtra("imageProfile", imageProfile)
             startActivity(intent)
             finish()
         }
-        builder.setNegativeButton("No") {dialogInterface, which ->
+        builder.setNegativeButton("No") { dialogInterface, which ->
             Toast.makeText(applicationContext, "Cancel saved profile", Toast.LENGTH_SHORT).show()
         }
         val alertDialog: AlertDialog = builder.create()

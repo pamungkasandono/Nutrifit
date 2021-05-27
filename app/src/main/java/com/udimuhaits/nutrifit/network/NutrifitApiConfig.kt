@@ -5,15 +5,23 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object UserApiConfig {
+object NutrifitApiConfig {
     private const val BASE_URL = "https://nutrifit-id.herokuapp.com/"
 
-    fun getUserApiService(token: String?): UserApiService {
+    private fun retrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+    }
+
+    fun getNutrifitApiService(token: String?): NutrifitApiService {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor {chain ->
+            .addInterceptor { chain ->
                 val request = chain
                     .request()
                     .newBuilder()
@@ -22,25 +30,31 @@ object UserApiConfig {
                 chain.proceed(request)
             }
             .build()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-        return retrofit.create(UserApiService::class.java)
+        val retrofit = retrofit(client)
+        return retrofit.create(NutrifitApiService::class.java)
     }
 
-    fun postUserApiService(): UserApiService {
+    fun postUserApiService(): NutrifitApiService {
+        val loggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+        val retrofit = retrofit(client)
+        return retrofit.create(NutrifitApiService::class.java)
+    }
+
+    fun getCNApiService(): CNApiServices {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://api.calorieninjas.com/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        return retrofit.create(UserApiService::class.java)
+        return retrofit.create(CNApiServices::class.java)
     }
 }
