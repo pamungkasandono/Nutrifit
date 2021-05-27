@@ -5,18 +5,24 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 
 var SET_NUTRIFIT_ACCESS_TOKEN = ""
 
 val GET_NUTRIFIT_ACCESS_TOKEN = SET_NUTRIFIT_ACCESS_TOKEN
+
+fun Context.userPreference(): SharedPreferences {
+    return this.getSharedPreferences("UsersPreference", AppCompatActivity.MODE_PRIVATE)
+}
 
 fun forcePortrait(activity: Activity) {
     val screenLayoutSize =

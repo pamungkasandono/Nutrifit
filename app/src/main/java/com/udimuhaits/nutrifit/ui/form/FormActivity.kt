@@ -19,7 +19,7 @@ import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
-import com.udimuhaits.nutrifit.utils.SET_NUTRIFIT_ACCESS_TOKEN
+import com.udimuhaits.nutrifit.utils.userPreference
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,8 +53,11 @@ class FormActivity : AppCompatActivity() {
 
         viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
 
-            // set to global token
-            SET_NUTRIFIT_ACCESS_TOKEN = users.accessToken.toString()
+            // set token to prefrence
+            this.userPreference().edit().apply {
+                putString("token", users.accessToken.toString())
+                apply()
+            }
 
             users.apply {
                 binding.edtUsername.setText(username)

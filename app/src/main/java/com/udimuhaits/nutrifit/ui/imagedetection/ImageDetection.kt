@@ -225,10 +225,14 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         layerVisibility(true)
         val body = UploadRequestBody(file, "image", this)
 
-//        val token = GET_NUTRIFIT_ACCESS_TOKEN
+        val token = this.userPreference().getString("token", "")
 
-        val token =
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MjIyNzQxLCJqdGkiOiJlOGY3YWI5ODRlZTM0NDM2OWE0NmM0MjM2OTBhNTVkYyIsInVzZXJfaWQiOjQ2fQ.WiK55mRRLHUTkrlP4QZ4O_Z0mSGmgD3Uh0FSuyOIlfw"
+        if (token == "") {
+            this.toast("Token kosong")
+        }
+
+//        val token =
+//            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MjIyNzQxLCJqdGkiOiJlOGY3YWI5ODRlZTM0NDM2OWE0NmM0MjM2OTBhNTVkYyIsInVzZXJfaWQiOjQ2fQ.WiK55mRRLHUTkrlP4QZ4O_Z0mSGmgD3Uh0FSuyOIlfw"
         NutrifitApiConfig.getNutrifitApiService(token).uploadImage(
             MultipartBody.Part.createFormData("image_url", file.name, body)
         ).enqueue(object : Callback<ResponseImageML> {
