@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.ui.form.FormActivity
 import com.udimuhaits.nutrifit.ui.getstarted.ContainerActivity
-import com.udimuhaits.nutrifit.ui.home.HomeActivity
+import com.udimuhaits.nutrifit.ui.login.LoginActivity
 
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
@@ -68,11 +68,11 @@ class SplashActivity : AppCompatActivity() {
     private fun navigateToLogin() {
         Handler().postDelayed({
             // for developing skip login
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+//            startActivity(Intent(this, HomeActivity::class.java))
+//            finish()
 
-//            val intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }, 2000)
     }
 
