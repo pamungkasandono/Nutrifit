@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="32dp"
+    tools:context=".ui.getstarted.StartedFragment">
+
+    <ImageView
+        android:id="@+id/img_started"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_rocket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_lets_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/started"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_started" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/get_started_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_lets_start" />
+
+    <ImageView
+        android:id="@+id/img_round_one"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/ic_round_two"
+        app:layout_constraintBottom_toTopOf="@id/btn_started"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/img_round_two"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/ic_round_one"
+        app:layout_constraintBottom_toTopOf="@id/btn_started"
+        app:layout_constraintStart_toEndOf="@id/img_round_one"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/btn_started"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_started"
+        android:text="@string/get_started"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

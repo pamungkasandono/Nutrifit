@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="32dp"
+    tools:context=".ui.getstarted.IntroductionFragment">
+
+    <ImageView
+        android:id="@+id/img_healthy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_food"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_live_healthy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/live_healthy_introduction"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_healthy" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/introduction_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_live_healthy" />
+
+    <ImageView
+        android:id="@+id/img_round_one"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/ic_round_one"
+        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/img_round_two"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/ic_round_two"
+        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        app:layout_constraintStart_toEndOf="@id/img_round_one"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_started"
+        android:text="@string/next"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

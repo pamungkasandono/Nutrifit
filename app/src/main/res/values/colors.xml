@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_200">#79b5f6</color>
+    <color name="blue_500">#4386C3</color>
+    <color name="blue_700">#264867</color>
+    <color name="greentea_200">#aeecff</color>
+    <color name="greentea_700">#7bbae2</color>
+    <color name="black">#000</color>
+    <color name="black_700">#0e1111</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- project accent color -->
+    <color name="gray_ec">#ECECEC</color>
+    <color name="gray_f2">#F2F2F2</color>
+    <color name="gray_c4">#C4C4C4</color>
+    <color name="gray_b0">#B0B0B0</color>
+    <color name="gray_8e_text_dark">#8E8E8E</color>
+
+    <!-- detail item color -->
+    <color name="item_lvl_1">#88FF7D</color>
+    <color name="item_lvl_2">#FCFF7D</color>
+    <color name="item_lvl_3">#FF7D7D</color>
+
+</resources>
