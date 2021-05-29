@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@drawable/bg_login"
+    android:padding="16dp"
     tools:context=".ui.login.LoginActivity">
 
     <TextView
@@ -22,53 +22,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/with"
-        android:textColor="@color/white"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_healthy"
-        app:layout_constraintStart_toStartOf="@id/tv_healthy"/>
-
     <ImageView
         android:id="@+id/img_nutrifit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_logo"
-        app:layout_constraintTop_toBottomOf="@id/tv_with"
-        app:layout_constraintStart_toStartOf="@id/tv_with"
+        app:layout_constraintStart_toStartOf="@id/tv_healthy"
+        app:layout_constraintTop_toBottomOf="@id/tv_healthy"
         tools:ignore="ContentDescription" />
 
     <TextView
+        android:id="@+id/tv_description"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/login_content"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/img_nutrifit"
-        app:layout_constraintStart_toStartOf="@id/img_nutrifit"/>
+        app:layout_constraintStart_toStartOf="@id/img_nutrifit"
+        app:layout_constraintTop_toBottomOf="@id/img_nutrifit" />
 
     <Button
         android:id="@+id/btn_login_google"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:background="@drawable/bg_started"
         android:text="@string/sign_up_with_google"
         app:icon="@drawable/ic_google"
-        android:background="@drawable/bg_started"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

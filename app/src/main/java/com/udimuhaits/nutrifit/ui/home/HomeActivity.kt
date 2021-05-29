@@ -3,7 +3,9 @@ package com.udimuhaits.nutrifit.ui.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +15,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -23,9 +27,11 @@ import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
 import com.udimuhaits.nutrifit.databinding.DialogChooseImageBinding
 import com.udimuhaits.nutrifit.databinding.DialogMenuManualBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
+import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
 import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
+import com.udimuhaits.nutrifit.ui.settings.SettingsActivity
 import com.udimuhaits.nutrifit.utils.forcePortrait
 import com.udimuhaits.nutrifit.utils.toast
 import com.udimuhaits.nutrifit.utils.toastLong
@@ -33,20 +39,36 @@ import com.udimuhaits.nutrifit.utils.writeIsGranted
 
 @SuppressLint("SetTextI18n")
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var binding: ActivityHomeBinding
-    private var isBackPressed = false
-    private val arrayListManual = ArrayList<ListManualEntity>()
-    private val limitTotalMenu = 15
-    private lateinit var menuManualBinding: DialogMenuManualBinding
-    private val dialogManualAdapter = DialogManualAdapter()
-    private lateinit var dialog: AlertDialog
-    private var setDisabledState: Boolean = false
 
     companion object {
         const val FROM_DETAIL = 100
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
+    }
+
+    private lateinit var binding: ActivityHomeBinding
+    private var isBackPressed = false
+    private val arrayListManual = ArrayList<ListManualEntity>()
+    private val limitTotalMenu = 15
+    private lateinit var menuManualBinding: DialogMenuManualBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private val dialogManualAdapter = DialogManualAdapter()
+    private lateinit var dialog: AlertDialog
+    private var setDisabledState: Boolean = false
+    private var clicked = false
+
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.from_button_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.to_button_anim
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,25 +101,28 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         arrayListManual.add(ListManualEntity("cake", 2))
         arrayListManual.add(ListManualEntity("rice", 1))
         arrayListManual.add(ListManualEntity("fries", 1))
-        val imageUser = intent.getStringExtra("imageProfile")
-        Glide.with(this)
-            .load(imageUser)
-            .into(binding.imgProfile)
+
+        sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putBoolean("isHome", true)
+            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
+            Glide.with(applicationContext)
+                .load(imageUser)
+                .into(binding.imgProfile)
+            apply()
+        }
 
         // fix portrait
         forcePortrait(this)
 
         var visibilityButtonState = true
         binding.imgProfile.setOnClickListener {
-            if (visibilityButtonState) {
-                visibilityButtonState = !visibilityButtonState
-                binding.button.visibility = View.VISIBLE
-                binding.button1.visibility = View.VISIBLE
-            } else {
-                visibilityButtonState = !visibilityButtonState
-                binding.button.visibility = View.GONE
-                binding.button1.visibility = View.GONE
-            }
+            onAddButtonClick()
+        }
+
+        binding.btnSetting.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         binding.btnSearch.setOnClickListener {
@@ -110,42 +135,72 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.selectImage.setOnClickListener {
-            val alertDialog = AlertDialog.Builder(this).create()
-            alertDialog.setTitle("Choose your picture from")
-            val dialogImageOptionsBinding =
-                DialogChooseImageBinding.inflate(LayoutInflater.from(this))
-            alertDialog.setView(dialogImageOptionsBinding.root)
-
-            dialogImageOptionsBinding.selectGallery.setOnClickListener {
-                if (this.writeIsGranted()) {
-                    // Permission is not granted
-                    this.toastLong("To use this feature you have to grant the permission!")
-                } else {
-                    Intent(this, ImageDetection::class.java).apply {
-                        this.putExtra("youChoose", PICK_IMAGE)
-                        startActivityForResult(this, FROM_IMAGE_DETECTION)
-                    }
-                }
-                alertDialog.dismiss()
-            }
-
-            dialogImageOptionsBinding.selectCamera.setOnClickListener {
-                if (this.writeIsGranted()) {
-                    // Permission is not granted
-                    this.toastLong("To use this feature you have to grant the permission!")
-                } else {
-                    Intent(this, ImageDetection::class.java).apply {
-                        this.putExtra("youChoose", TAKE_PICTURE)
-                        startActivityForResult(this, FROM_IMAGE_DETECTION)
-                    }
-                }
-                alertDialog.dismiss()
-            }
-
-            alertDialog.show()
-
+            selectImage()
         }
         //./ end of perubahan
+    }
+
+    private fun onAddButtonClick() {
+        setVisibility(clicked)
+        setAnimation(clicked)
+        setClickable(clicked)
+        clicked = !clicked
+    }
+
+    private fun setVisibility(clicked: Boolean) {
+        if (!clicked) {
+            binding.btnSetting.visibility = View.VISIBLE
+        } else {
+            binding.btnSetting.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setAnimation(clicked: Boolean) {
+        if (!clicked) {
+            binding.btnSetting.startAnimation(fromBottom)
+        } else {
+            binding.btnSetting.startAnimation(toBottom)
+        }
+    }
+
+    private fun setClickable(clicked: Boolean) {
+        binding.btnSetting.isClickable = !clicked
+    }
+
+    private fun selectImage() {
+        val alertDialog = AlertDialog.Builder(this).create()
+        alertDialog.setTitle("Choose your picture from")
+        val dialogImageOptionsBinding =
+            DialogChooseImageBinding.inflate(LayoutInflater.from(this))
+        alertDialog.setView(dialogImageOptionsBinding.root)
+
+        dialogImageOptionsBinding.selectGallery.setOnClickListener {
+            if (this.writeIsGranted()) {
+                // Permission is not granted
+                this.toastLong("To use this feature you have to grant the permission!")
+            } else {
+                Intent(this, ImageDetection::class.java).apply {
+                    this.putExtra("youChoose", PICK_IMAGE)
+                    startActivityForResult(this, FROM_IMAGE_DETECTION)
+                }
+            }
+            alertDialog.dismiss()
+        }
+
+        dialogImageOptionsBinding.selectCamera.setOnClickListener {
+            if (this.writeIsGranted()) {
+                // Permission is not granted
+                this.toastLong("To use this feature you have to grant the permission!")
+            } else {
+                Intent(this, ImageDetection::class.java).apply {
+                    this.putExtra("youChoose", TAKE_PICTURE)
+                    startActivityForResult(this, FROM_IMAGE_DETECTION)
+                }
+            }
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     private fun manualDialog(arrayManualList: ArrayList<ListManualEntity>) {

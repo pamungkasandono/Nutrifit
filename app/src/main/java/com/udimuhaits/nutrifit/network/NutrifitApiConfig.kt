@@ -1,16 +1,16 @@
 package com.udimuhaits.nutrifit.network
 
+import com.udimuhaits.nutrifit.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object NutrifitApiConfig {
-    private const val BASE_URL = "https://nutrifit-id.herokuapp.com/"
 
     private fun retrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL_NUTRIFIT)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -51,7 +51,7 @@ object NutrifitApiConfig {
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.calorieninjas.com/v1/")
+            .baseUrl(BuildConfig.BASE_URL_CN)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

@@ -16,6 +16,16 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL_NUTRIFIT", '"https://nutrifit-id.herokuapp.com/"')
+        buildConfigField("String", "BASE_URL_CN", '"https://api.calorieninjas.com/v1/"')
+        buildConfigField("String", "GET_LOGIN", '"google/"')
+        buildConfigField("String", "GET_USER", '"api/profile/{id}/"')
+        buildConfigField("String", "POST_LOGIN", '"google/login/"')
+        buildConfigField("String", "PUT_USER", '"api/profile/{id}/"')
+        buildConfigField("String", "POST_IMAGE", '"api/uploadimage/prediction/yolov5s6"')
+        buildConfigField("String", "SEARCH_OBJECT", '"nutrition/"')
+        buildConfigField("String", "API_KEY_CN", '"C3MdCBHlM3s/jwiIIMyEmA==q7ZibM5bKfBXJBB4"')
     }
 
     buildFeatures {
@@ -55,6 +65,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.tomergoldst.android:tooltips:1.0.10'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
 
     // TESTING
     testImplementation 'junit:junit:4.13.2'

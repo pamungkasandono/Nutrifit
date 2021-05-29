@@ -2,8 +2,11 @@ package com.udimuhaits.nutrifit.ui.form
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
@@ -16,31 +19,48 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
-import com.udimuhaits.nutrifit.databinding.ActivityFormBinding
+import com.udimuhaits.nutrifit.databinding.ActivityFormInputBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.utils.userPreference
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FormActivity : AppCompatActivity() {
+class FormInputActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFormBinding
+    companion object {
+        const val PREFS_SAVE = "sharedPrefSave"
+    }
+
+    private lateinit var binding: ActivityFormInputBinding
     private lateinit var fAuth: FirebaseAuth
     private lateinit var gsc: GoogleSignInClient
     private lateinit var datePickerDialog: DatePickerDialog
     private lateinit var dateFormatter: SimpleDateFormat
+    private lateinit var sharedPreferences: SharedPreferences
+    private var isBackPressed = false
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFormBinding.inflate(layoutInflater)
+        binding = ActivityFormInputBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         gsc = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN)
         fAuth = FirebaseAuth.getInstance()
         dateFormatter = SimpleDateFormat("yyyy-MM-dd")
 
+        postUser()
+
+        binding.edtDate.setOnClickListener {
+            showDateDialog()
+        }
+
+        setEnabledButton()
+
+    }
+
+    private fun postUser() {
         val account = fAuth.currentUser
         val aUsername = account?.displayName
         val aEmail = account?.email
@@ -63,7 +83,7 @@ class FormActivity : AppCompatActivity() {
                 binding.edtUsername.setText(username)
                 binding.edtEmail.setText(email)
                 Glide
-                    .with(this@FormActivity)
+                    .with(this@FormInputActivity)
                     .load(profilePic)
                     .into(binding.imgProfile)
             }
@@ -74,7 +94,6 @@ class FormActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, status, Toast.LENGTH_SHORT).show()
                 }
             })
-
             binding.btnSaveProfile.setOnClickListener {
                 val birthDate = binding.edtDate.text.toString()
                 val height = binding.edtHeight.text.toString()
@@ -84,7 +103,7 @@ class FormActivity : AppCompatActivity() {
                     users.accessToken,
                     birthDate,
                     height.toInt(),
-                    weight.toInt(),
+                    weight.toDouble(),
                     users.profilePic
                 )
             }
@@ -94,13 +113,6 @@ class FormActivity : AppCompatActivity() {
             binding.progressBar.visibility =
                 if (loading) android.view.View.VISIBLE else android.view.View.GONE
         })
-
-        binding.edtDate.setOnClickListener {
-            showDateDialog()
-        }
-
-        setEnabledButton()
-
     }
 
     private fun showDateDialog() {
@@ -145,13 +157,13 @@ class FormActivity : AppCompatActivity() {
         token: String?,
         birthDate: String?,
         height: Int?,
-        weight: Int?,
+        weight: Double?,
         imageProfile: String?
     ) {
         val viewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
-        )[LoginViewModel::class.java]
+        )[FormViewModel::class.java]
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(R.string.dialog_title)
@@ -164,10 +176,16 @@ class FormActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
             viewModel.putUser(userId, token, birthDate, height, weight)
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("imageProfile", imageProfile)
-            startActivity(intent)
-            finish()
+            sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
+            sharedPreferences.edit().apply {
+                putBoolean("isSave", true)
+                putString("saveImage", imageProfile)
+                val intent = Intent(applicationContext, HomeActivity::class.java)
+                intent.putExtra("imageProfile", imageProfile)
+                startActivity(intent)
+                finish()
+                apply()
+            }
         }
         builder.setNegativeButton("No") { dialogInterface, which ->
             Toast.makeText(applicationContext, "Cancel saved profile", Toast.LENGTH_SHORT).show()
@@ -175,5 +193,14 @@ class FormActivity : AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
+    }
+
+    override fun onBackPressed() {
+        if (isBackPressed) {
+            super.onBackPressed()
+        }
+        isBackPressed = true
+        Toast.makeText(this, "Tekan sekali lagi untuk kembali", Toast.LENGTH_SHORT).show()
+        Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }

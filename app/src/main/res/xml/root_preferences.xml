@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+
+
+    <PreferenceCategory app:title="Setting Nutrifit" android:textColor="#FFFFFF">
+
+        <Preference
+            android:icon="@drawable/ic_update_profile"
+            android:key="update_profile"
+            app:summary="@string/update_profile_summary"
+            app:title="@string/update_profile_title" />
+
+        <Preference
+            android:icon="@drawable/ic_language"
+            android:key="change_language"
+            app:summary="@string/change_language_summary"
+            app:title="@string/change_language_title" />
+
+        <Preference
+            android:icon="@drawable/ic_logout"
+            android:key="logout"
+            app:summary="@string/logout_summary"
+            app:title="@string/logout_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

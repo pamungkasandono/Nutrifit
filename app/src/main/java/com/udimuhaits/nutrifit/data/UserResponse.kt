@@ -31,6 +31,16 @@ data class UserProfile(
     @field:SerializedName("id")
     val id: Int?,
 
+    @field:SerializedName("username")
+    val username: String?,
+
+    @field:SerializedName("email")
+    val email: String?,
+
+    @field:SerializedName("profile_pic")
+    val profilePic: String?,
+
+
     @field:SerializedName("birth_date")
     val birthDate: String?,
 
@@ -38,5 +48,5 @@ data class UserProfile(
     val height: Int?,
 
     @field:SerializedName("weight")
-    val weight: Int?,
+    val weight: Double?,
 )

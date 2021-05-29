@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Nutrifit</string>
     <string name="started">Lets get started</string>
-    <string name="live_healthy">Live healthy\nwith Nutrifit</string>
+    <string name="live_healthy">Live healthy\nwith</string>
+    <string name="live_healthy_introduction">Live healthy\nwith Nutrifit</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
-    <string name="with">with</string>
     <string name="sign_up_with_google">Sign up with google</string>
     <string name="dummy_size_100g">100g</string>
     <string name="nutrition_placeholder_in_g">%s g</string>
@@ -25,8 +25,8 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="birth_date">Birth Date</string>
-    <string name="height">Height</string>
-    <string name="weight">Weight</string>
+    <string name="height">Height(cm)</string>
+    <string name="weight">Weight(kg)</string>
     <string name="dialog_title">Save Profile</string>
     <string name="message_save">Are you sure to proceed this data? You can always edit your data in profile.</string>
     <string name="text_sudah_makan_apa_hari_ini">Sudah makan apa hari ini?</string>
@@ -34,6 +34,15 @@
     <string name="txt_zero_in_mg">0mg</string>
     <string name="txt_zero_in_g">0g</string>
     <string name="txt_zero_in_cal">0cal</string>
-
-    <!--    <string name="default_web_client_id">ad</string>-->
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="update_profile_title">Update Profile</string>
+    <string name="update_profile_summary">Update your profile here</string>
+    <string name="change_language_title">Change Language</string>
+    <string name="change_language_summary">Change the application language</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_summary">Logout your gmail account</string>
+    <string name="logout_message">Are you sure want to logout from Nutrifit?</string>
+    <string name="setting">Setting</string>
+    <string name="dialog_title_logout">Logout</string>
+    <string name="update_profile">Update Profile</string>
 </resources>

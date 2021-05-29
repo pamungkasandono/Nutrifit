@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
@@ -48,7 +49,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_serving"
                 app:layout_constraintStart_toEndOf="@+id/tv_serving"
-                app:layout_constraintTop_toTopOf="@+id/tv_serving" />
+                app:layout_constraintTop_toTopOf="@+id/tv_serving"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_serving_size"
@@ -78,7 +80,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_calories"
                 app:layout_constraintStart_toEndOf="@+id/tv_calories"
-                app:layout_constraintTop_toTopOf="@+id/tv_calories" />
+                app:layout_constraintTop_toTopOf="@+id/tv_calories"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_calories"
@@ -109,7 +112,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_carbo"
                 app:layout_constraintStart_toEndOf="@+id/tv_carbo"
-                app:layout_constraintTop_toTopOf="@+id/tv_carbo" />
+                app:layout_constraintTop_toTopOf="@+id/tv_carbo"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_carbo"
@@ -140,7 +144,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_protein"
                 app:layout_constraintStart_toEndOf="@+id/tv_protein"
-                app:layout_constraintTop_toTopOf="@+id/tv_protein" />
+                app:layout_constraintTop_toTopOf="@+id/tv_protein"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_protein"
@@ -171,7 +176,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_fat"
                 app:layout_constraintStart_toEndOf="@+id/tv_fat"
-                app:layout_constraintTop_toTopOf="@+id/tv_fat" />
+                app:layout_constraintTop_toTopOf="@+id/tv_fat"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_fat_total"
@@ -202,7 +208,8 @@
                 style="@style/ImageViewListItemDetail"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_cholesterol"
                 app:layout_constraintStart_toEndOf="@+id/tv_cholesterol"
-                app:layout_constraintTop_toTopOf="@+id/tv_cholesterol" />
+                app:layout_constraintTop_toTopOf="@+id/tv_cholesterol"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_data_cholesterol"
