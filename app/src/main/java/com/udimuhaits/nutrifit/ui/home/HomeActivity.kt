@@ -20,17 +20,19 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
 import com.udimuhaits.nutrifit.databinding.DialogChooseImageBinding
 import com.udimuhaits.nutrifit.databinding.DialogMenuManualBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
-import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
 import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
+import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.ui.settings.SettingsActivity
 import com.udimuhaits.nutrifit.utils.forcePortrait
 import com.udimuhaits.nutrifit.utils.toast
@@ -45,6 +47,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
+        const val PREFS_HOME = "sharedPrefHome"
     }
 
     private lateinit var binding: ActivityHomeBinding
@@ -98,19 +101,13 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 */
         }
 
-        arrayListManual.add(ListManualEntity("cake", 2))
-        arrayListManual.add(ListManualEntity("rice", 1))
-        arrayListManual.add(ListManualEntity("fries", 1))
+//        arrayListManual.add(ListManualEntity("cake", 2))
+//        arrayListManual.add(ListManualEntity("rice", 1))
+//        arrayListManual.add(ListManualEntity("fries", 1))
 
-        sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
-        sharedPreferences.edit().apply {
-            putBoolean("isHome", true)
-            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
-            Glide.with(applicationContext)
-                .load(imageUser)
-                .into(binding.imgProfile)
-            apply()
-        }
+        getImageFromForm()
+
+        getImageFromLogin()
 
         // fix portrait
         forcePortrait(this)
@@ -138,6 +135,24 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             selectImage()
         }
         //./ end of perubahan
+    }
+
+    private fun getImageFromLogin() {
+        val imageProfile = intent.getStringExtra("imageProfile")
+        Glide
+            .with(this)
+            .load(imageProfile)
+            .into(binding.imgProfile)
+    }
+
+    private fun getImageFromForm() {
+        sharedPreferences = this.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
+        sharedPreferences.apply {
+            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
+            Glide.with(applicationContext)
+                .load(imageUser)
+                .into(binding.imgProfile)
+        }
     }
 
     private fun onAddButtonClick() {

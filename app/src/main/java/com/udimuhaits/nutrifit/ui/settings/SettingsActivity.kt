@@ -74,17 +74,18 @@ class SettingsActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         sharedPreferences =
                             requireActivity().getSharedPreferences(
-                                LoginActivity.PREFS_LOGIN,
+                                LoginActivity.PREFS_STARTED,
                                 MODE_PRIVATE
                             )
                         sharedPreferences.edit().apply {
-                            putBoolean("isLogout", true)
+                            putBoolean("isLogin", false)
+                            putBoolean("isSave", false)
                             fAuth.signOut()
-                            val intent = Intent(activity, LoginActivity::class.java)
+                            val intent = Intent(activity, LoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             startActivity(intent)
+                            activity?.finish()
                             Toast.makeText(activity, "Successfully logout", Toast.LENGTH_SHORT)
                                 .show()
-                            activity?.finish()
                             apply()
                         }
                     }

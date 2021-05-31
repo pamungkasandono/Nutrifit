@@ -11,6 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -20,12 +21,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityLoginBinding
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity
+import com.udimuhaits.nutrifit.ui.form.FormViewModel
+import com.udimuhaits.nutrifit.ui.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val RC_SIGN_IN = 100
-        const val PREFS_LOGIN = "sharedPrefLogin"
+        const val PREFS_STARTED = "sharedPrefStarted"
     }
 
     private lateinit var binding: ActivityLoginBinding
@@ -94,15 +97,13 @@ class LoginActivity : AppCompatActivity() {
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
                                     sharedPreferences =
-                                        this.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE)
+                                        this.getSharedPreferences(
+                                            PREFS_STARTED,
+                                            Context.MODE_PRIVATE
+                                        )
                                     sharedPreferences.edit().apply {
                                         putBoolean("isLogin", true)
-                                        val intent = Intent(
-                                            applicationContext,
-                                            FormInputActivity::class.java
-                                        ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        startActivity(intent)
-                                        finish()
+                                        checkProfile()
                                         apply()
                                     }
                                 } else {
@@ -122,6 +123,68 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("cek", sat.exception.toString())
             }
         }
+    }
+
+    private fun checkProfile() {
+        val viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[LoginViewModel::class.java]
+
+        val viewModelForm = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[FormViewModel::class.java]
+
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
+
+        viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            viewModelForm.getUser(users.accessToken, users.userId).observe(this, { data ->
+                Log.d("cekBirthDate", data.birthDate.toString())
+                Log.d("cekHeight", data.height.toString())
+                Log.d("cekWeight", data.weight.toString())
+
+                when {
+                    data.birthDate != null -> {
+                        navigateToHome(users.profilePic.toString())
+                    }
+                    data.height != null -> {
+                        navigateToHome(users.profilePic.toString())
+                    }
+                    data.weight != null -> {
+                        navigateToHome(users.profilePic.toString())
+                    }
+                    else -> {
+                        navigateToForm()
+                    }
+                }
+            })
+        })
+    }
+
+    private fun navigateToHome(imageProfile: String) {
+        sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putBoolean("isSave", true)
+            val intent = Intent(
+                applicationContext,
+                HomeActivity::class.java
+            ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.putExtra("imageProfile", imageProfile)
+            startActivity(intent)
+            finish()
+            apply()
+        }
+    }
+
+    private fun navigateToForm() {
+        val intent =
+            Intent(this, FormInputActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 
     override fun onBackPressed() {

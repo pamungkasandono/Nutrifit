@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -13,13 +14,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivitySplashBinding
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity
-import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.getstarted.ContainerActivity
-import com.udimuhaits.nutrifit.ui.getstarted.StartedFragment
-import com.udimuhaits.nutrifit.ui.getstarted.StartedFragment.Companion.PREFS_STARTED
+import com.udimuhaits.nutrifit.ui.getstarted.StartedFragment.Companion.PREFS_ONBOARDING
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginActivity
-import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_LOGIN
+import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_STARTED
 
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
@@ -56,24 +55,24 @@ class SplashActivity : AppCompatActivity() {
         binding.imgSlogan.startAnimation(leftAnimation)
         binding.imgUdimuhaits.startAnimation(bottomAnimation)
 
-        sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(PREFS_ONBOARDING, Context.MODE_PRIVATE)
         val isStarted = sharedPreferences.getBoolean("isStarted", false)
 
-        sharedPreferences = this.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
         val isLogin = sharedPreferences.getBoolean("isLogin", false)
-        val isLogout = sharedPreferences.getBoolean("isLogout", false)
-
-        sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
         val isSave = sharedPreferences.getBoolean("isSave", false)
-        val isHome = sharedPreferences.getBoolean("isHome", false)
+
+        Log.d("cekIsStarted", isStarted.toString())
+        Log.d("cekIsLogin", isLogin.toString())
+        Log.d("cekIsSave", isSave.toString())
 
         if (!isStarted) {
             navigateToContainer()
-        } else if (!isLogin || isLogout) {
+        } else if (!isLogin) {
             navigateToLogin()
         } else if (!isSave) {
             navigateToForm()
-        } else if (isHome || isSave) {
+        } else {
             navigateToHome()
         }
 

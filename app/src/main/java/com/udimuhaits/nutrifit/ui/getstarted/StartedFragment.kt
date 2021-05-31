@@ -17,7 +17,7 @@ import com.udimuhaits.nutrifit.ui.login.LoginActivity
 class StartedFragment : Fragment() {
 
     companion object {
-        const val PREFS_STARTED = "sharedPrefStarted"
+        const val PREFS_ONBOARDING = "sharedPrefOnBoarding"
     }
 
     private lateinit var binding: FragmentStartedBinding
@@ -56,7 +56,7 @@ class StartedFragment : Fragment() {
         binding.imgRoundTwo.startAnimation(bottomAnimation)
         binding.btnStarted.startAnimation(bottomAnimation)
 
-        sharedPreferences = activity?.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)!!
+        sharedPreferences = activity?.getSharedPreferences(PREFS_ONBOARDING, Context.MODE_PRIVATE)!!
 
         binding.btnStarted.setOnClickListener {
             sharedPreferences.edit().apply {
