@@ -3,6 +3,7 @@ Nutrifit Mobile Apps adalah android apps yang dibangun menggunakan bahasa pemrog
 
 
 ## Instalation
+Untuk mengclone project ini copykan kode snippet dibawah ini ke terminal anda.
 ```bash
  Git Clone https://github.com/pamungkasandono/Nutrifit.git
 ```
