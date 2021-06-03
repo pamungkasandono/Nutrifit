@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -55,6 +56,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private val arrayListManual = ArrayList<ListManualEntity>()
     private val limitTotalMenu = 15
     private lateinit var menuManualBinding: DialogMenuManualBinding
+    private lateinit var fAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
     private val dialogManualAdapter = DialogManualAdapter()
     private lateinit var dialog: AlertDialog
@@ -78,6 +80,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fAuth = FirebaseAuth.getInstance()
 
         if (this.writeIsGranted()) {
             // Permission is not granted
@@ -138,11 +142,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun getImageFromLogin() {
-        val imageProfile = intent.getStringExtra("imageProfile")
-        Glide
-            .with(this)
-            .load(imageProfile)
-            .into(binding.imgProfile)
+        val viewModelLogin = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[LoginViewModel::class.java]
+
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
+
+        viewModelLogin.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            Glide
+                .with(this)
+                .load(users.profilePic)
+                .into(binding.imgProfile)
+        })
+
+        val message = intent.getStringExtra("success_login")
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun getImageFromForm() {
@@ -228,7 +246,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         dialogBuilder.setView(menuManualBinding.root)
         dialog = dialogBuilder.create()
         dialog.setCanceledOnTouchOutside(false)
-        dialog.setTitle(resources.getString(R.string.text_sudah_makan_apa_hari_ini))
+        dialog.setTitle(resources.getString(R.string.what_do_you_want_to_eat_today))
         dialog.show()
 
         // handling kalau arraynya kosong
@@ -434,7 +452,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         isBackPressed = true
-        this.toast("Tekan sekali lagi untuk kembali")
+        Toast.makeText(this, getString(R.string.back), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }

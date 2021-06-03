@@ -167,17 +167,18 @@ class FormInputActivity : AppCompatActivity() {
         builder.setTitle(R.string.dialog_title)
         builder.setMessage(R.string.message_save)
         builder.setIcon(R.drawable.ic_save)
-        builder.setPositiveButton("Yes") { dialogInterface, which ->
+        builder.setPositiveButton(R.string.yes) { dialogInterface, which ->
             sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
             sharedPreferences.edit().apply {
                 putBoolean("isSave", true)
                 Toast.makeText(
                     applicationContext,
-                    "Welcome to nutirift. Start your better live journey right now!",
+                    getString(R.string.start_your_better_live_journey),
                     Toast.LENGTH_SHORT
                 ).show()
                 viewModel.putUser(userId, token, birthDate, height, weight)
-                sharedPreferences = applicationContext.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
+                sharedPreferences =
+                    applicationContext.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
                 sharedPreferences.edit().apply {
                     putString("saveImage", imageProfile)
                     val intent = Intent(applicationContext, HomeActivity::class.java)
@@ -189,8 +190,12 @@ class FormInputActivity : AppCompatActivity() {
                 apply()
             }
         }
-        builder.setNegativeButton("No") { dialogInterface, which ->
-            Toast.makeText(applicationContext, "Cancel saved profile", Toast.LENGTH_SHORT).show()
+        builder.setNegativeButton(R.string.no) { dialogInterface, which ->
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.cancel_save_profile),
+                Toast.LENGTH_SHORT
+            ).show()
         }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
@@ -202,7 +207,7 @@ class FormInputActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         isBackPressed = true
-        Toast.makeText(this, "Tekan sekali lagi untuk kembali", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.back), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }

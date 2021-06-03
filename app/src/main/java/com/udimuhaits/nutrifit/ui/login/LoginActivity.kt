@@ -143,29 +143,16 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
             viewModelForm.getUser(users.accessToken, users.userId).observe(this, { data ->
-                Log.d("cekBirthDate", data.birthDate.toString())
-                Log.d("cekHeight", data.height.toString())
-                Log.d("cekWeight", data.weight.toString())
-
-                when {
-                    data.birthDate != null -> {
-                        navigateToHome(users.profilePic.toString())
-                    }
-                    data.height != null -> {
-                        navigateToHome(users.profilePic.toString())
-                    }
-                    data.weight != null -> {
-                        navigateToHome(users.profilePic.toString())
-                    }
-                    else -> {
-                        navigateToForm()
-                    }
+                if (data.birthDate != null || data.height != null || data.weight != null) {
+                    navigateToHome()
+                } else {
+                    navigateToForm()
                 }
             })
         })
     }
 
-    private fun navigateToHome(imageProfile: String) {
+    private fun navigateToHome() {
         sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
             putBoolean("isSave", true)
@@ -173,7 +160,7 @@ class LoginActivity : AppCompatActivity() {
                 applicationContext,
                 HomeActivity::class.java
             ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.putExtra("imageProfile", imageProfile)
+            intent.putExtra("success_login", getString(R.string.success_login))
             startActivity(intent)
             finish()
             apply()
@@ -192,7 +179,7 @@ class LoginActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         isBackPressed = true
-        Toast.makeText(this, "Tekan sekali lagi untuk kembali", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.back), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }

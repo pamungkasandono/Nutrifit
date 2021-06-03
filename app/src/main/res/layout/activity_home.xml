@@ -58,16 +58,19 @@
             android:background="@drawable/bg_banner_beranda"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.25" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
-            android:text="SELAMAT\nDATANG"
+            android:text="@string/welcome"
+            android:textSize="18sp"
             android:textAppearance="@style/TextBeranda.Title"
             app:layout_constraintStart_toStartOf="@+id/framelayout2"
             app:layout_constraintTop_toTopOf="@+id/framelayout2" />
@@ -75,12 +78,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Yuk cek nutrisi\nmakanan kita\ndisini!"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="32dp"
+            android:text="@string/let_s_check_nour_food_nutrition_nhere"
             android:textAppearance="@style/TextBeranda.SubTitle"
             app:layout_constraintBottom_toBottomOf="@+id/framelayout2"
-            app:layout_constraintStart_toStartOf="@+id/framelayout2"
+            app:layout_constraintStart_toStartOf="@id/framelayout2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <ImageView
@@ -103,7 +106,6 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/corner_rad_10"
             android:backgroundTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/framelayout2">
 
@@ -120,7 +122,7 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="14dp"
                 android:paddingBottom="10dp"
-                android:text="Makan apa anda hari ini?"
+                android:text="@string/what_do_you_want_to_eat_today"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/btn_search"
                 app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="16dp"
-                android:text="Upload foto makanan anda"
+                android:text="@string/upload_your_food_image_here"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/select_image"

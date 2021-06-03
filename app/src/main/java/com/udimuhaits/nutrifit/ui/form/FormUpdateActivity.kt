@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormUpdateBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
@@ -84,7 +85,7 @@ class FormUpdateActivity : AppCompatActivity() {
                 )
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "You successfully update your profile!", Toast.LENGTH_SHORT)
+                Toast.makeText(this, getString(R.string.success_update), Toast.LENGTH_SHORT)
                     .show()
             }
         })

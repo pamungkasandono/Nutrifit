@@ -52,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imgLogo.startAnimation(topAnimation)
-        binding.imgSlogan.startAnimation(leftAnimation)
+        binding.tvSplashScreen.startAnimation(leftAnimation)
         binding.imgUdimuhaits.startAnimation(bottomAnimation)
 
         sharedPreferences = this.getSharedPreferences(PREFS_ONBOARDING, Context.MODE_PRIVATE)
@@ -61,10 +61,6 @@ class SplashActivity : AppCompatActivity() {
         sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
         val isLogin = sharedPreferences.getBoolean("isLogin", false)
         val isSave = sharedPreferences.getBoolean("isSave", false)
-
-        Log.d("cekIsStarted", isStarted.toString())
-        Log.d("cekIsLogin", isLogin.toString())
-        Log.d("cekIsSave", isSave.toString())
 
         if (!isStarted) {
             navigateToContainer()
