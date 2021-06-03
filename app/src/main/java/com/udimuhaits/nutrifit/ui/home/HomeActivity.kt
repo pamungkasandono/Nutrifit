@@ -17,27 +17,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
 import com.udimuhaits.nutrifit.databinding.DialogChooseImageBinding
 import com.udimuhaits.nutrifit.databinding.DialogMenuManualBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
-import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
-import com.udimuhaits.nutrifit.ui.home.history.HistoryAdapter
-import com.udimuhaits.nutrifit.ui.home.history.HistoryViewModel
 import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
+import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.ui.settings.SettingsActivity
-import com.udimuhaits.nutrifit.utils.*
-import java.util.*
-import kotlin.collections.ArrayList
+import com.udimuhaits.nutrifit.utils.forcePortrait
+import com.udimuhaits.nutrifit.utils.toast
+import com.udimuhaits.nutrifit.utils.toastLong
+import com.udimuhaits.nutrifit.utils.writeIsGranted
 
 @SuppressLint("SetTextI18n")
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
@@ -47,6 +48,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
+        const val PREFS_HOME = "sharedPrefHome"
     }
 
     private lateinit var binding: ActivityHomeBinding
@@ -54,13 +56,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private val arrayListManual = ArrayList<ListManualEntity>()
     private val limitTotalMenu = 15
     private lateinit var menuManualBinding: DialogMenuManualBinding
+    private lateinit var fAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
     private val dialogManualAdapter = DialogManualAdapter()
     private lateinit var dialog: AlertDialog
     private var setDisabledState: Boolean = false
     private var clicked = false
-    private lateinit var viewModel: HistoryViewModel
-    private val historyAdapter = HistoryAdapter()
 
     private val fromBottom: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -75,11 +76,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         )
     }
 
-    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fAuth = FirebaseAuth.getInstance()
 
         if (this.writeIsGranted()) {
             // Permission is not granted
@@ -89,46 +91,32 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ), 10
             )
+/*
+            Snackbar.make(
+                uploadBinding.root, "Camera not have permission", Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction("How") {
+                    Toast.makeText(
+                        this,
+                        "Anda perlu buka perngaturan -> aplikasi -> Nutrifit -> Izin -> Penyimpanan",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }.show()
+*/
         }
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[HistoryViewModel::class.java]
+//        arrayListManual.add(ListManualEntity("cake", 2))
+//        arrayListManual.add(ListManualEntity("rice", 1))
+//        arrayListManual.add(ListManualEntity("fries", 1))
 
-        viewModel.getHistory(this).observe(this) {
-            Log.i("asdasd", it.toString())
-            historyAdapter.setData(it)
-            historyAdapter.notifyDataSetChanged()
-        }
+        getImageFromForm()
 
-//        viewModel.getLatestFeed()
-
-        with(binding.recyclerViewHistory) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = historyAdapter
-        }
-
-        arrayListManual.add(ListManualEntity("cake", 2))
-        arrayListManual.add(ListManualEntity("rice", 1))
-        arrayListManual.add(ListManualEntity("fries", 1))
-
-        sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
-        sharedPreferences.edit().apply {
-            putBoolean("isHome", true)
-            val imageUser = sharedPreferences.getString("saveImage", null)
-            if (imageUser != null) {
-                Glide.with(applicationContext)
-                    .load(imageUser)
-                    .into(binding.imgProfile)
-                apply()
-            }
-        }
+        getImageFromLogin()
 
         // fix portrait
         forcePortrait(this)
 
+        var visibilityButtonState = true
         binding.imgProfile.setOnClickListener {
             onAddButtonClick()
         }
@@ -151,6 +139,38 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             selectImage()
         }
         //./ end of perubahan
+    }
+
+    private fun getImageFromLogin() {
+        val viewModelLogin = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[LoginViewModel::class.java]
+
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
+
+        viewModelLogin.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            Glide
+                .with(this)
+                .load(users.profilePic)
+                .into(binding.imgProfile)
+        })
+
+        val message = intent.getStringExtra("success_login")
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getImageFromForm() {
+        sharedPreferences = this.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
+        sharedPreferences.apply {
+            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
+            Glide.with(applicationContext)
+                .load(imageUser)
+                .into(binding.imgProfile)
+        }
     }
 
     private fun onAddButtonClick() {
@@ -226,7 +246,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         dialogBuilder.setView(menuManualBinding.root)
         dialog = dialogBuilder.create()
         dialog.setCanceledOnTouchOutside(false)
-        dialog.setTitle(resources.getString(R.string.text_sudah_makan_apa_hari_ini))
+        dialog.setTitle(resources.getString(R.string.what_do_you_want_to_eat_today))
         dialog.show()
 
         // handling kalau arraynya kosong
@@ -307,7 +327,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     result.isNotEmpty() -> {
                         Intent(this, DetailActivity::class.java).apply {
                             putExtra(DetailActivity.QUERY, result)
-                            putExtra(DetailActivity.ARRAYLIST, arrayListManual)
                             putExtra(DetailActivity.WITH_IMAGE, false)
                             startActivityForResult(this, FROM_DETAIL)
                         }
@@ -327,19 +346,10 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 FROM_DETAIL -> {
                     if (data?.getBooleanExtra("isSuccess", false) == true) {
                         this.toast("success")
-//                        viewModel.getHistory(this).observe(this) {
-//                            Log.i("asdasd", it.toString())
-//                            Toast.makeText(this, "loaded", Toast.LENGTH_SHORT).show()
-//                            historyAdapter.setData(it)
-//                            historyAdapter.notifyDataSetChanged()
-//                        }
-                        finish()
-                        startActivity(intent)
-                        this.toastLong("reloaded")
+                        arrayListManual.clear()
+                        dialogManualAdapter.setData(arrayListManual)
+                        dialogManualAdapter.notifyDataSetChanged()
                     }
-                    arrayListManual.clear()
-                    dialogManualAdapter.setData(arrayListManual)
-                    dialogManualAdapter.notifyDataSetChanged()
                 }
                 FROM_IMAGE_DETECTION -> {
                     val status = data?.getBooleanExtra("isSuccess", false)
@@ -442,7 +452,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         isBackPressed = true
-        this.toast("Tekan sekali lagi untuk kembali")
+        Toast.makeText(this, getString(R.string.back), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }

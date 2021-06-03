@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Nutrifit</string>
     <string name="started">Lets get started</string>
     <string name="live_healthy">Live healthy\nwith</string>
@@ -13,12 +13,12 @@
     <string name="txt_calories">Calories</string>
     <string name="txt_protein">Protein</string>
     <string name="txt_serving_size">Serving Size</string>
-    <string name="txt_carbo">Carbohydrates</string>
-    <string name="txt_fat_total">Fat</string>
+    <string name="txt_carbo">Carbohydrates Total</string>
+    <string name="txt_fat_total">Fat Total</string>
     <string name="dummy_text_hamburger">Hamburger</string>
     <string name="img_desc_info_button">Info button</string>
     <string name="txt_cholesterol">Cholesterol</string>
-    <string name="login_content">Simple, Hight Class, Elegant, And User Friendly.</string>
+    <string name="login_content">Nutrition check can be easier and your health\ncan always be maintained</string>
     <string name="introduction_content">Simple, high-class, elegant with easy-to-use tools. Nutrifit is here to help you in checking the nutrition of your food and other supporting features.</string>
     <string name="get_started_content">Take care of your dietary nutrition starting from yourself with Nutrifit.</string>
     <string name="save_profile">Save Profile</string>
@@ -29,7 +29,6 @@
     <string name="weight">Weight(kg)</string>
     <string name="dialog_title">Save Profile</string>
     <string name="message_save">Are you sure to proceed this data? You can always edit your data in profile.</string>
-    <string name="text_sudah_makan_apa_hari_ini">Sudah makan apa hari ini?</string>
     <string name="str_result_s">Result : %s</string>
     <string name="txt_zero_in_mg">0mg</string>
     <string name="txt_zero_in_g">0g</string>
@@ -45,7 +44,18 @@
     <string name="setting">Setting</string>
     <string name="dialog_title_logout">Logout</string>
     <string name="update_profile">Update Profile</string>
-    <string name="string_you_have_eaten">%s you have eaten:</string>
-    <string name="string_more_detail_with_your_food_journey_s">More detail with your food journey %s.</string>
-    <string name="string_this_day_you_have_eat_about_s_foods_beverages_nwith_total_calories_is_scal">This day you have eat about %s foods/beverages\nWith total calories is %s cal</string>
+    <string name="checking_food_nutrition_made_easy">Checking food nutrition made easy</string>
+    <string name="welcome">WELCOME !</string>
+    <string name="let_s_check_nour_food_nutrition_nhere">Let\'s check\nour food nutrition\nhere!</string>
+    <string name="what_do_you_want_to_eat_today">What do you want to eat today?</string>
+    <string name="upload_your_food_image_here">Upload your food image here!</string>
+    <string name="start_your_better_live_journey">Welcome to nutirift. Start your better live journey right now!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel_save_profile">Cancel saved profile</string>
+    <string name="back">Press again to go back!</string>
+    <string name="success_update">You successfully update your profile!</string>
+    <string name="success_logout">Successfully logout!</string>
+    <string name="cancel_logout">Logout canceled</string>
+    <string name="success_login">Congrats,you successfully login with your gmail account!</string>
 </resources>

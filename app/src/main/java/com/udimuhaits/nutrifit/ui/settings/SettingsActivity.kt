@@ -69,29 +69,30 @@ class SettingsActivity : AppCompatActivity() {
             builder.setTitle(R.string.dialog_title_logout)
             builder.setMessage(R.string.logout_message)
             builder.setIcon(R.drawable.ic_logout)
-            builder.setPositiveButton("Yes") { dialogInterface, which ->
+            builder.setPositiveButton(R.string.yes) { dialogInterface, which ->
                 gsc.signOut().addOnCompleteListener(OnCompleteListener { task ->
                     if (task.isSuccessful) {
                         sharedPreferences =
                             requireActivity().getSharedPreferences(
-                                LoginActivity.PREFS_LOGIN,
+                                LoginActivity.PREFS_STARTED,
                                 MODE_PRIVATE
                             )
                         sharedPreferences.edit().apply {
-                            putBoolean("isLogout", true)
+                            putBoolean("isLogin", false)
+                            putBoolean("isSave", false)
                             fAuth.signOut()
-                            val intent = Intent(activity, LoginActivity::class.java)
+                            val intent = Intent(activity, LoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             startActivity(intent)
-                            Toast.makeText(activity, "Successfully logout", Toast.LENGTH_SHORT)
-                                .show()
                             activity?.finish()
+                            Toast.makeText(activity, getString(R.string.success_logout), Toast.LENGTH_SHORT)
+                                .show()
                             apply()
                         }
                     }
                 })
             }
-            builder.setNegativeButton("No") { dialogInterface, which ->
-                Toast.makeText(activity, "Logout canceled", Toast.LENGTH_SHORT).show()
+            builder.setNegativeButton(R.string.no) { dialogInterface, which ->
+                Toast.makeText(activity, getString(R.string.cancel_logout), Toast.LENGTH_SHORT).show()
             }
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCancelable(false)

@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormInputBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
+import com.udimuhaits.nutrifit.ui.home.HomeActivity.Companion.PREFS_HOME
+import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_STARTED
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.utils.getDate
 import com.udimuhaits.nutrifit.utils.userPreference
@@ -28,10 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FormInputActivity : AppCompatActivity() {
-
-    companion object {
-        const val PREFS_SAVE = "sharedPrefSave"
-    }
 
     private lateinit var binding: ActivityFormInputBinding
     private lateinit var fAuth: FirebaseAuth
@@ -177,26 +175,35 @@ class FormInputActivity : AppCompatActivity() {
         builder.setTitle(R.string.dialog_title)
         builder.setMessage(R.string.message_save)
         builder.setIcon(R.drawable.ic_save)
-        builder.setPositiveButton("Yes") { dialogInterface, which ->
-            Toast.makeText(
-                applicationContext,
-                "Welcome to nutirift. Start your better live journey right now!",
-                Toast.LENGTH_SHORT
-            ).show()
-            viewModel.putUser(userId, token, birthDate, height, weight)
-            sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
+        builder.setPositiveButton(R.string.yes) { dialogInterface, which ->
+            sharedPreferences = this.getSharedPreferences(PREFS_STARTED, Context.MODE_PRIVATE)
             sharedPreferences.edit().apply {
                 putBoolean("isSave", true)
-                putString("saveImage", imageProfile)
-                val intent = Intent(applicationContext, HomeActivity::class.java)
-                intent.putExtra("imageProfile", imageProfile)
-                startActivity(intent)
-                finish()
+                Toast.makeText(
+                    applicationContext,
+                    getString(R.string.start_your_better_live_journey),
+                    Toast.LENGTH_SHORT
+                ).show()
+                viewModel.putUser(userId, token, birthDate, height, weight)
+                sharedPreferences =
+                    applicationContext.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
+                sharedPreferences.edit().apply {
+                    putString("saveImage", imageProfile)
+                    val intent = Intent(applicationContext, HomeActivity::class.java)
+                    intent.putExtra("imageProfile", imageProfile)
+                    startActivity(intent)
+                    finish()
+                    apply()
+                }
                 apply()
             }
         }
-        builder.setNegativeButton("No") { dialogInterface, which ->
-            Toast.makeText(applicationContext, "Cancel saved profile", Toast.LENGTH_SHORT).show()
+        builder.setNegativeButton(R.string.no) { dialogInterface, which ->
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.cancel_save_profile),
+                Toast.LENGTH_SHORT
+            ).show()
         }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
@@ -208,7 +215,7 @@ class FormInputActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         isBackPressed = true
-        Toast.makeText(this, "Tekan sekali lagi untuk kembali", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.back), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ isBackPressed = false }, 2000)
     }
 }
