@@ -2,17 +2,17 @@ package com.udimuhaits.nutrifit.ui.home.dialogmenu
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ItemMenuManualBinding
 import com.udimuhaits.nutrifit.utils.toast
 
 class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupViewHolder>() {
-    private val mData = ArrayList<ListManualEntity>()
+    private val mData = ArrayList<MenuListEntity>()
     private lateinit var deleteListener: InterfaceListener
     private lateinit var dataChangeListener: InterfaceListener
 
-    fun setData(item: ArrayList<ListManualEntity>) {
+    fun setData(item: ArrayList<MenuListEntity>) {
         mData.clear()
         mData.addAll(item)
     }
@@ -42,7 +42,7 @@ class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupView
 
     inner class PopupViewHolder(private val itemBinding: ItemMenuManualBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(listManualEntity: ListManualEntity) {
+        fun bind(listManualEntity: MenuListEntity) {
             with(itemBinding) {
                 textView.text = listManualEntity.name
                 textView2.text = listManualEntity.value.toString()

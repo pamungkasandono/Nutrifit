@@ -13,9 +13,10 @@ import com.bumptech.glide.Glide
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.data.CNEntity
 import com.udimuhaits.nutrifit.data.FoodDataDailyConsumptionItem
+import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ActivityDetailBinding
 import com.udimuhaits.nutrifit.network.NutrifitApiConfig
-import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
+import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.utils.areYouSure
 import com.udimuhaits.nutrifit.utils.toast
 import com.udimuhaits.nutrifit.utils.toastLong
@@ -27,12 +28,19 @@ import retrofit2.Response
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var detailBinding: ActivityDetailBinding
-    private var arrayList = ArrayList<ListManualEntity>()
     private var arrayData = ArrayList<CNEntity>()
+    private var arrayMenuList = ArrayList<MenuListEntity>()
     private var imageID: String? = null
     private var isProsesLoadData = true
     private var saveIt = true
     private var newDataUpdated = false
+
+    private var totalServing = 0F
+    private var totalCalories = 0F
+    private var totalCarbo = 0F
+    private var totalProtein = 0F
+    private var totalFat = 0F
+    private var totalCholesterol = 0F
 
     companion object {
         const val QUERY = "QUERY"
@@ -53,9 +61,35 @@ class DetailActivity : AppCompatActivity() {
             detailBinding.fab.collapse()
         }
 
-//        detailBinding.fabOption2.setOnClickListener {
-//            this.toast("Option 2 - Add Other")
-//        }
+        detailBinding.fabOption2.setOnClickListener {
+            this.toast("Option 2 - back to home and then open image dialog")
+            Intent(this, HomeActivity::class.java).apply {
+                putExtra("fab_code", "image")
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(this)
+                if (saveIt) {
+                    saveToHistory()
+                    newDataUpdated = true
+//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
+                }
+                finish()
+            }
+        }
+
+        detailBinding.fabOption3.setOnClickListener {
+            this.toast("Option 3 - back to home and then open alert dialog")
+            Intent(this, HomeActivity::class.java).apply {
+                putExtra("fab_code", "manual")
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(this)
+                if (saveIt) {
+                    saveToHistory()
+                    newDataUpdated = true
+//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
+                }
+                finish()
+            }
+        }
 
         val detailAdapter = DetailAdapter()
 
@@ -68,9 +102,10 @@ class DetailActivity : AppCompatActivity() {
         val query = intentData?.getString(QUERY)
         val isComeWithImage = intentData?.getBoolean(WITH_IMAGE)
         imageID = intentData?.getString(IMAGE_ID, null)
-        arrayList =
-            intentData?.getParcelableArrayList<ListManualEntity>(ARRAYLIST) as ArrayList<ListManualEntity>
-        Log.d("asdasd ARRAYLIST", arrayList.toString())
+        arrayMenuList =
+            intentData?.getParcelableArrayList<MenuListEntity>(ARRAYLIST) as ArrayList<MenuListEntity>
+        this.toastLong("ARRAYLIST $arrayMenuList")
+        Log.d("asdasd ARRAYLIST", arrayMenuList.toString())
 
         if (isComeWithImage == true) {
             Glide.with(this)
@@ -85,7 +120,6 @@ class DetailActivity : AppCompatActivity() {
         if (query != null) {
             viewModel.getListFood(query).observe(this) {
                 // data bakal di dapat dari sini jadi mapping array terjadi di sini
-                this.toastLong(it.size.toString())
                 if (it.isEmpty()) {
                     detailBinding.fabOption1.visibility = View.GONE
                     saveIt = false
@@ -96,31 +130,29 @@ class DetailActivity : AppCompatActivity() {
                         this.visibility = View.GONE
                     }
                 }
+
                 Log.d("asdasd result", it.toString())
                 this.toast("done")
                 detailAdapter.setData(it)
                 detailAdapter.notifyDataSetChanged()
-
                 // save to history
                 arrayData.addAll(it)
                 isProsesLoadData = false
-            }
-        }
 
-        detailAdapter.getTotalListener(object : DetailAdapter.InterfaceListener {
-            override fun totalSendToDetail(
-                totalServing: String,
-                totalCalories: String,
-                totalCarbo: String,
-                totalProtein: String,
-                totalFat: String,
-                totalCholesterol: String
-            ) {
+                for (data in it) {
+                    totalServing += data.servingSizeG.toFloat()
+                    totalCalories += data.calories.toFloat()
+                    totalCarbo += data.carbohydratesTotalG.toFloat()
+                    totalProtein += data.proteinG.toFloat()
+                    totalFat += data.fatTotalG.toFloat()
+                    totalCholesterol += data.cholesterolMg.toFloat()
+                }
+
                 with(detailBinding) {
                     this.totalServing.post {
                         this.totalServing.text = resources.getString(
                             R.string.nutrition_placeholder_in_g,
-                            String.format("%.1f", totalServing.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalServing)
                         )
                         this.totalServing.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Serving")
@@ -129,17 +161,16 @@ class DetailActivity : AppCompatActivity() {
                     this.totalCalories.post {
                         this.totalCalories.text = resources.getString(
                             R.string.nutrition_placeholder_in_cal,
-                            String.format("%.1f", totalCalories.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalCalories)
                         )
                         this.totalCalories.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Calories")
                         }
-                        Log.d("asdasd", totalCalories)
                     }
                     this.totalCarbo.post {
                         this.totalCarbo.text = resources.getString(
                             R.string.nutrition_placeholder_in_g,
-                            String.format("%.1f", totalCarbo.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalCarbo)
                         )
                         this.totalCarbo.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Carbo")
@@ -148,7 +179,7 @@ class DetailActivity : AppCompatActivity() {
                     this.totalProtein.post {
                         this.totalProtein.text = resources.getString(
                             R.string.nutrition_placeholder_in_g,
-                            String.format("%.1f", totalProtein.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalProtein)
                         )
                         this.totalProtein.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Protein")
@@ -157,7 +188,7 @@ class DetailActivity : AppCompatActivity() {
                     this.totalFat.post {
                         this.totalFat.text = resources.getString(
                             R.string.nutrition_placeholder_in_g,
-                            String.format("%.1f", totalFat.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalFat)
                         )
                         this.totalFat.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Fat")
@@ -166,15 +197,16 @@ class DetailActivity : AppCompatActivity() {
                     this.totalCholesterol.post {
                         this.totalCholesterol.text = resources.getString(
                             R.string.nutrition_placeholder_in_mg,
-                            String.format("%.1f", totalCholesterol.toFloat())
+                            String.format("%.1f", this@DetailActivity.totalCholesterol)
                         )
                         this.totalCholesterol.setOnClickListener {
                             this@DetailActivity.toastLong("This values is total Cholesterol")
                         }
                     }
                 }
+
             }
-        })
+        }
 
         with(detailBinding.rvNutrition) {
             layoutManager = LinearLayoutManager(context)
@@ -190,6 +222,7 @@ class DetailActivity : AppCompatActivity() {
                     if (saveIt) {
                         saveToHistory()
                         newDataUpdated = true
+//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
                     }
                     Intent().apply {
                         this.putExtra("isSuccess", newDataUpdated)
@@ -214,15 +247,15 @@ class DetailActivity : AppCompatActivity() {
         for (item in arrayData.indices) {
             Log.i(
                 "asdasd true/false",
-                "${arrayData[item].name} == ${arrayList[item].name} ${arrayData[item].name == arrayList[item].name}"
+                "${arrayData[item].name} == ${arrayMenuList[item].name} ${arrayData[item].name == arrayMenuList[item].name}"
             )
-            if (arrayData[item].name == arrayList[item].name) {
+            if (arrayData[item].name == arrayMenuList[item].name) {
                 foodDataDailyConsumptionItem.add(
                     FoodDataDailyConsumptionItem(
                         arrayData[item].name,
                         arrayData[item].fatTotalG.toFloat(),
                         arrayData[item].fiberG.toFloat(),
-                        arrayList[item].value,
+                        arrayMenuList[item].value,
                         arrayData[item].calories.toFloat(),
                         arrayData[item].fatSaturatedG.toFloat(),
                         arrayData[item].sodiumMg.toFloat(),
@@ -243,7 +276,7 @@ class DetailActivity : AppCompatActivity() {
                         arrayData[item].name,
                         arrayData[item].fatTotalG.toFloat(),
                         arrayData[item].fiberG.toFloat(),
-                        arrayList[item].value,
+                        arrayMenuList[item].value,
                         arrayData[item].calories.toFloat(),
                         arrayData[item].fatSaturatedG.toFloat(),
                         arrayData[item].sodiumMg.toFloat(),

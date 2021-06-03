@@ -252,14 +252,23 @@
             app:fab_size="mini"
             app:fab_title="Dont save to history" />
 
-<!--        <com.getbase.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/fab_option_2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:fab_colorNormal="@color/blue_500"-->
-<!--            app:fab_icon="@drawable/ic_add_new_menu"-->
-<!--            app:fab_size="mini"-->
-<!--            app:fab_title="Add Another Menu" />-->
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_option_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/blue_500"
+            app:fab_icon="@drawable/ic_add_new_picture"
+            app:fab_size="mini"
+            app:fab_title="Pick or Take another picture" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_option_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/blue_500"
+            app:fab_icon="@drawable/ic_add_new_menu"
+            app:fab_size="mini"
+            app:fab_title="Add Another Menu" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

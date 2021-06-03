@@ -26,19 +26,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
+import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ActivityHomeBinding
 import com.udimuhaits.nutrifit.databinding.DialogChooseImageBinding
 import com.udimuhaits.nutrifit.databinding.DialogMenuManualBinding
 import com.udimuhaits.nutrifit.ui.detail.DetailActivity
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
-import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
+import com.udimuhaits.nutrifit.ui.home.history.HistoryAdapter
+import com.udimuhaits.nutrifit.ui.home.history.HistoryViewModel
 import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.ui.settings.SettingsActivity
-import com.udimuhaits.nutrifit.utils.forcePortrait
-import com.udimuhaits.nutrifit.utils.toast
-import com.udimuhaits.nutrifit.utils.toastLong
-import com.udimuhaits.nutrifit.utils.writeIsGranted
+import com.udimuhaits.nutrifit.utils.*
 
 @SuppressLint("SetTextI18n")
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
@@ -48,20 +47,24 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
+        const val IMAGE_SAVE_CODE = 204
         const val PREFS_HOME = "sharedPrefHome"
     }
 
     private lateinit var binding: ActivityHomeBinding
     private var isBackPressed = false
-    private val arrayListManual = ArrayList<ListManualEntity>()
+    private val arrayMenuList = ArrayList<MenuListEntity>()
     private val limitTotalMenu = 15
     private lateinit var menuManualBinding: DialogMenuManualBinding
     private lateinit var fAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
     private val dialogManualAdapter = DialogManualAdapter()
-    private lateinit var dialog: AlertDialog
+    private lateinit var dialogImageOption: AlertDialog
+    private lateinit var dialogAddManual: AlertDialog
     private var setDisabledState: Boolean = false
     private var clicked = false
+    private lateinit var viewModel: HistoryViewModel
+    private val historyAdapter = HistoryAdapter()
 
     private val fromBottom: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -91,23 +94,28 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ), 10
             )
-/*
-            Snackbar.make(
-                uploadBinding.root, "Camera not have permission", Snackbar.LENGTH_INDEFINITE
-            )
-                .setAction("How") {
-                    Toast.makeText(
-                        this,
-                        "Anda perlu buka perngaturan -> aplikasi -> Nutrifit -> Izin -> Penyimpanan",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }.show()
-*/
         }
 
-//        arrayListManual.add(ListManualEntity("cake", 2))
-//        arrayListManual.add(ListManualEntity("rice", 1))
-//        arrayListManual.add(ListManualEntity("fries", 1))
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[HistoryViewModel::class.java]
+
+        viewModel.getHistory(this).observe(this) {
+            Log.i("asdasd", it.toString())
+            historyAdapter.setData(it)
+            historyAdapter.notifyDataSetChanged()
+        }
+
+        with(binding.recyclerViewHistory) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = historyAdapter
+        }
+//
+//        arrayMenuList.add(ListManualEntity("cake", 2))
+//        arrayMenuList.add(ListManualEntity("rice", 1))
+//        arrayMenuList.add(ListManualEntity("fries", 1))
 
         getImageFromForm()
 
@@ -116,7 +124,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         // fix portrait
         forcePortrait(this)
 
-        var visibilityButtonState = true
         binding.imgProfile.setOnClickListener {
             onAddButtonClick()
         }
@@ -127,17 +134,29 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.btnSearch.setOnClickListener {
-            manualDialog(arrayListManual)
+            manualDialog(arrayMenuList)
         }
 
         binding.searchBox.setOnClickListener {
-            this.toast("Search box")
-            manualDialog(arrayListManual)
+            manualDialog(arrayMenuList)
         }
 
         binding.selectImage.setOnClickListener {
             selectImage()
         }
+
+        val extraFromDetail = intent.extras
+
+        if (extraFromDetail?.getString("fab_code") == "image") {
+            this.toast("open image")
+            intent.removeExtra("fab_code")
+            selectImage()
+        } else if (extraFromDetail?.getString("fab_code") == "manual") {
+            this.toast("open manual")
+            intent.removeExtra("fab_code")
+            manualDialog(arrayMenuList)
+        }
+
         //./ end of perubahan
     }
 
@@ -201,11 +220,11 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun selectImage() {
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setTitle("Choose your picture from")
+        dialogImageOption = AlertDialog.Builder(this).create()
+        dialogImageOption.setTitle("Choose your picture from")
         val dialogImageOptionsBinding =
             DialogChooseImageBinding.inflate(LayoutInflater.from(this))
-        alertDialog.setView(dialogImageOptionsBinding.root)
+        dialogImageOption.setView(dialogImageOptionsBinding.root)
 
         dialogImageOptionsBinding.selectGallery.setOnClickListener {
             if (this.writeIsGranted()) {
@@ -217,7 +236,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     startActivityForResult(this, FROM_IMAGE_DETECTION)
                 }
             }
-            alertDialog.dismiss()
+            dialogImageOption.dismiss()
         }
 
         dialogImageOptionsBinding.selectCamera.setOnClickListener {
@@ -230,24 +249,23 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     startActivityForResult(this, FROM_IMAGE_DETECTION)
                 }
             }
-            alertDialog.dismiss()
+            dialogImageOption.dismiss()
         }
 
-        alertDialog.show()
+        dialogImageOption.show()
     }
 
-    private fun manualDialog(arrayManualList: ArrayList<ListManualEntity>) {
-        val dialogBuilder = AlertDialog.Builder(this)
+    private fun manualDialog(arrayManualList: ArrayList<MenuListEntity>) {
+        dialogAddManual = AlertDialog.Builder(this).create()
         menuManualBinding = DialogMenuManualBinding.inflate(LayoutInflater.from(this))
 
         menuManualBinding.recyclerView2.layoutManager = LinearLayoutManager(this)
         menuManualBinding.recyclerView2.adapter = dialogManualAdapter
 
-        dialogBuilder.setView(menuManualBinding.root)
-        dialog = dialogBuilder.create()
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setTitle(resources.getString(R.string.what_do_you_want_to_eat_today))
-        dialog.show()
+        dialogAddManual.setView(menuManualBinding.root)
+        dialogAddManual.setCanceledOnTouchOutside(false)
+        dialogAddManual.setTitle(resources.getString(R.string.what_do_you_want_to_eat_today))
+        dialogAddManual.show()
 
         // handling kalau arraynya kosong
         if (arrayManualList.size >= 1) {
@@ -258,7 +276,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         // cek jika array penuh
-        if (arrayListManual.size >= limitTotalMenu) {
+        if (arrayMenuList.size >= limitTotalMenu) {
             menuManualBinding.inputMenuSection.apply {
                 this.visibility = View.INVISIBLE
                 this.animate().alpha(0f).duration = 200
@@ -304,7 +322,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         // listener to increase the value and update the data list
         dialogManualAdapter.setOnDataChangeListener(object : DialogManualAdapter.InterfaceListener {
             override fun onValueChange(position: Int, name: String, newValue: Int) {
-                arrayManualList[position] = ListManualEntity(name, newValue)
+                arrayManualList[position] = MenuListEntity(name, newValue)
                 dialogManualAdapter.setData(arrayManualList)
                 dialogManualAdapter.notifyDataSetChanged()
             }
@@ -323,17 +341,18 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_save_data -> {
                 // function to convert array to string
                 val result = arrayManualToString()
+                dialogAddManual.dismiss()
                 when {
                     result.isNotEmpty() -> {
                         Intent(this, DetailActivity::class.java).apply {
                             putExtra(DetailActivity.QUERY, result)
+                            putExtra(DetailActivity.ARRAYLIST, arrayMenuList)
                             putExtra(DetailActivity.WITH_IMAGE, false)
                             startActivityForResult(this, FROM_DETAIL)
                         }
                     }
                     else -> this.toast("You haven't eat anything yet?")
                 }
-                dialog.dismiss()
             }
         }
     }
@@ -342,18 +361,38 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             Log.d("asdasd requestcode", requestCode.toString())
+            toast("request code $requestCode")
             when (requestCode) {
+                IMAGE_SAVE_CODE -> {
+                    toast("IMAGE_SAVE_CODE Sukses")
+                }
                 FROM_DETAIL -> {
+                    this.toast("from detail")
                     if (data?.getBooleanExtra("isSuccess", false) == true) {
                         this.toast("success")
-                        arrayListManual.clear()
-                        dialogManualAdapter.setData(arrayListManual)
+                        arrayMenuList.clear()
+                        dialogManualAdapter.setData(arrayMenuList)
                         dialogManualAdapter.notifyDataSetChanged()
+                        finish()
+                        startActivity(intent)
+                        this.toastLong("reloaded")
                     }
+                    arrayMenuList.clear()
+                    dialogManualAdapter.setData(arrayMenuList)
+                    dialogManualAdapter.notifyDataSetChanged()
                 }
                 FROM_IMAGE_DETECTION -> {
-                    val status = data?.getBooleanExtra("isSuccess", false)
-                    this.toast("from image $status")
+                    if (data?.getBooleanExtra("isSuccess", false) == true) {
+                        this.toast("success")
+                        arrayMenuList.clear()
+                        dialogManualAdapter.setData(arrayMenuList)
+                        dialogManualAdapter.notifyDataSetChanged()
+                        finish()
+                        startActivity(intent)
+                        this.toastLong("reloaded")
+                    } else {
+                        this.toastLong("not loaded")
+                    }
                 }
             }
         }
@@ -410,7 +449,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private fun addNewItem(): Boolean {
         val text = menuManualBinding.inputItemName.text
         var check = false
-        for (matchName in arrayListManual) {
+        for (matchName in arrayMenuList) {
             if (matchName.name == text.toString()) {
                 check = true
                 break
@@ -420,15 +459,15 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             this.toast("Menu $text sudah ada.")
             return false
         } else {
-            arrayListManual.add(ListManualEntity(text.toString(), 1))
-            dialogManualAdapter.setData(arrayListManual)
+            arrayMenuList.add(MenuListEntity(text.toString(), 1))
+            dialogManualAdapter.setData(arrayMenuList)
             dialogManualAdapter.notifyDataSetChanged()
             menuManualBinding.inputItemName.apply {
                 this.setText("")
                 this.requestFocus()
             }
         }
-        if (arrayListManual.size >= limitTotalMenu) {
+        if (arrayMenuList.size >= limitTotalMenu) {
             menuManualBinding.inputMenuSection.apply {
                 this.visibility = View.INVISIBLE
                 this.animate().alpha(0f).duration = 200
@@ -440,7 +479,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun arrayManualToString(): String {
         var text = ""
-        for (data in arrayListManual) {
+        for (data in arrayMenuList) {
             text += "${data.value} serving of ${data.name} "
         }
         return text

@@ -9,7 +9,7 @@
     <string name="dummy_size_100g">100g</string>
     <string name="nutrition_placeholder_in_g">%s g</string>
     <string name="nutrition_placeholder_in_mg">%s mg</string>
-    <string name="nutrition_placeholder_in_cal">%s cal</string>
+    <string name="nutrition_placeholder_in_cal">%s KCal</string>
     <string name="txt_calories">Calories</string>
     <string name="txt_protein">Protein</string>
     <string name="txt_serving_size">Serving Size</string>
@@ -32,7 +32,7 @@
     <string name="str_result_s">Result : %s</string>
     <string name="txt_zero_in_mg">0mg</string>
     <string name="txt_zero_in_g">0g</string>
-    <string name="txt_zero_in_cal">0cal</string>
+    <string name="txt_zero_in_cal">0KCal</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="update_profile_title">Update Profile</string>
     <string name="update_profile_summary">Update your profile here</string>
@@ -58,5 +58,8 @@
     <string name="success_logout">Successfully logout!</string>
     <string name="cancel_logout">Logout canceled</string>
     <string name="success_login">Congrats,you successfully login with your gmail account!</string>
-    // tess
+    <string name="string_you_have_eaten">%s you have eaten:</string>
+    <string name="string_more_detail_with_your_food_journey_s">More detail with your food journey %s.</string>
+    <string name="string_this_day_you_have_eat_about_s_foods_beverages_nwith_total_calories_is_scal">This day you have eat about %s foods/beverages\nWith total calories is %s KCal</string>
+    <string name="string_your_daily_calories_is_s_kcal">Your daily calories is %s KCal</string>
 </resources>

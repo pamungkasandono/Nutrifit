@@ -105,6 +105,20 @@ fun String.stringToDate(): String {
     return "${date1[0].toInt()}${suffixes[date1[0].toInt()]} ${date1[1]} ${date1[2]}"
 }
 
+fun getAgeByBirthDate(birthDate: String): String {
+//    val birthDate = "1999/12/25"
+    val arrayBirthDate = birthDate.split("/")
+
+    val dob = Calendar.getInstance()
+    val today = Calendar.getInstance()
+    dob[arrayBirthDate[0].toInt(), arrayBirthDate[1].toInt()] = arrayBirthDate[2].toInt()
+    var age = today[Calendar.YEAR] - dob[Calendar.YEAR]
+    if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
+        age--
+    }
+    val ageInt = age
+    return ageInt.toString()
+}
 
 
 

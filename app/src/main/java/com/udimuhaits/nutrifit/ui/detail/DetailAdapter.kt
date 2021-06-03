@@ -1,7 +1,6 @@
 package com.udimuhaits.nutrifit.ui.detail
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,24 +14,11 @@ import com.udimuhaits.nutrifit.databinding.ItemListFoodBinding
 
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     private var mCNEntity = ArrayList<CNEntity>()
-    private lateinit var totalListener: InterfaceListener
-    private var totalServing = 0F
-    private var totalCalories = 0F
-    private var totalCarbo = 0F
-    private var totalProtein = 0F
-    private var totalFat = 0F
-    private var totalCholesterol = 0F
-    private var testCount = 0
 
     fun setData(list: List<CNEntity>?) {
         if (list == null) return
         this.mCNEntity.clear()
-        Log.d("asdasd I got it :)", list.toString())
         this.mCNEntity.addAll(list)
-    }
-
-    fun getTotalListener(interfaceListener: InterfaceListener) {
-        this.totalListener = interfaceListener
     }
 
     override fun onCreateViewHolder(
@@ -41,12 +27,10 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     ): DetailViewHolder {
         val itemListBinding =
             ItemListFoodBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        Log.d("asdasd", itemListBinding.toString())
         return DetailViewHolder(itemListBinding)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        Log.d("asdasd 123", position.toString())
         holder.bind(mCNEntity[position])
     }
 
@@ -73,25 +57,6 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     root.resources.getString(R.string.nutrition_placeholder_in_g, CN.fatTotalG)
                 tvDataCholesterol.text =
                     root.resources.getString(R.string.nutrition_placeholder_in_mg, CN.cholesterolMg)
-
-                totalServing += CN.servingSizeG.toFloat()
-                totalCalories += CN.calories.toFloat()
-                totalCarbo += CN.carbohydratesTotalG.toFloat()
-                totalProtein += CN.proteinG.toFloat()
-                totalFat += CN.fatTotalG.toFloat()
-                totalCholesterol += CN.cholesterolMg.toFloat()
-
-                if ((adapterPosition + 1) == mCNEntity.size) {
-                    Log.d("asdasd", "process done awal 0 akhir ${testCount++}")
-                    totalListener.totalSendToDetail(
-                        totalServing.toString(),
-                        totalCalories.toString(),
-                        totalCarbo.toString(),
-                        totalProtein.toString(),
-                        totalFat.toString(),
-                        totalCholesterol.toString()
-                    )
-                }
 
                 tooltipManager = ToolTipsManager()
 
@@ -149,16 +114,5 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
                     tooltipManager.show(this.build())
                 }
         }
-    }
-
-    interface InterfaceListener {
-        fun totalSendToDetail(
-            totalServing: String,
-            totalCalories: String,
-            totalCarbo: String,
-            totalProtein: String,
-            totalFat: String,
-            totalCholesterol: String
-        )
     }
 }

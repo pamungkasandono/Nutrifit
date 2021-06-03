@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -64,6 +63,34 @@ class SplashActivity : AppCompatActivity() {
 
         if (!isStarted) {
             navigateToContainer()
+            //----------------- FOR DEVELOPING WITHOUT LOGIN -------------------//
+//            this.userPreference().edit().apply {
+//                putString(
+//                    "token",
+//                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MjIyNzQxLCJqdGkiOiJlOGY3YWI5ODRlZTM0NDM2OWE0NmM0MjM2OTBhNTVkYyIsInVzZXJfaWQiOjQ2fQ.WiK55mRRLHUTkrlP4QZ4O_Z0mSGmgD3Uh0FSuyOIlfw"
+//                )
+//                putInt("user_id", 46)
+//                apply()
+//            }
+//
+//            val weight = "45"
+//            val height = "155"
+//            val birthDate = "1999/12/25"
+//
+//            val dailyCalories = (88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt())
+//                    - (5.8 * getAgeByBirthDate(birthDate).toInt()))
+//
+//            this.userPreference().edit().apply {
+//                putString("weight", weight)
+//                putString("height", height)
+//                putString("birthDate", birthDate)
+//                putFloat("dailyCalories", dailyCalories.toFloat())
+//                apply()
+//            }
+//
+//            startActivity(Intent(this, HomeActivity::class.java))
+//            finish()
+
         } else if (!isLogin) {
             navigateToLogin()
         } else if (!isSave) {

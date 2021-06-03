@@ -24,7 +24,7 @@ import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.home.HomeActivity.Companion.PREFS_HOME
 import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_STARTED
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
-import com.udimuhaits.nutrifit.utils.getDate
+import com.udimuhaits.nutrifit.utils.getAgeByBirthDate
 import com.udimuhaits.nutrifit.utils.userPreference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -106,12 +106,17 @@ class FormInputActivity : AppCompatActivity() {
                     weight.toDouble(),
                     users.profilePic
                 )
-//                val kalori_harian = 88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt()) - (5.8 * (getDate() - birthDate))
 
-//                this.userPreference().edit().apply {
-//                    putString("kalori_harian", )
-//                    apply()
-//                }
+                val dailyCalories = (88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt())
+                        - (5.8 * getAgeByBirthDate(birthDate).toInt())).toString()
+
+                this.userPreference().edit().apply {
+                    putString("weight", weight)
+                    putString("height", height)
+                    putString("birthDate", birthDate)
+                    putFloat("dailyCalories", dailyCalories.toFloat())
+                    apply()
+                }
             }
         })
 

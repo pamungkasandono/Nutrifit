@@ -4,16 +4,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ItemMenuImageBinding
 import com.udimuhaits.nutrifit.utils.toast
 
 class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHolder>() {
-    private val mData = ArrayList<ImageMenuListData>()
+    private val mData = ArrayList<MenuListEntity>()
     private lateinit var changeListener: InterfaceListener
     private lateinit var checkedListener: InterfaceListener
     private var itemCheckedCount = 0
 
-    fun setData(item: ArrayList<ImageMenuListData>) {
+    fun setData(item: ArrayList<MenuListEntity>) {
         mData.clear()
         mData.addAll(item)
         Log.d("asdasd", mData.toString())
@@ -41,13 +42,13 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
 
     inner class ImageListViewHolder(private val itemBinding: ItemMenuImageBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(popupData: ImageMenuListData) {
+        fun bind(popupEntity: MenuListEntity) {
             with(itemBinding) {
-                textView5.text = popupData.value.toString()
+                textView5.text = popupEntity.value.toString()
 
                 checkBox2.apply {
-                    this.text = popupData.name
-                    this.isChecked = popupData.isChecked
+                    this.text = popupEntity.name
+                    this.isChecked = popupEntity.isChecked
 
                     if (this.isChecked) {
                         itemCheckedCount += 1
@@ -71,28 +72,28 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
 
                 checkBox2.setOnClickListener {
                     changeListener.onSomeDataClicked(
-                        adapterPosition, popupData.name, popupData.value, checkBox2.isChecked
+                        adapterPosition, popupEntity.name, popupEntity.value, checkBox2.isChecked
                     )
                 }
 
                 btnIncrease.setOnClickListener {
-                    val newValue = popupData.value + 1
+                    val newValue = popupEntity.value + 1
                     if (newValue > 10) {
                         root.context.toast("maximum porsi")
                     } else {
                         changeListener.onSomeDataClicked(
-                            adapterPosition, popupData.name, newValue, popupData.isChecked
+                            adapterPosition, popupEntity.name, newValue, popupEntity.isChecked
                         )
                     }
                 }
 
                 btnDecrease.setOnClickListener {
-                    val newValue = popupData.value - 1
+                    val newValue = popupEntity.value - 1
                     if (newValue < 1) {
                         root.context.toast("minimum portion is 1")
                     } else {
                         changeListener.onSomeDataClicked(
-                            adapterPosition, popupData.name, newValue, popupData.isChecked
+                            adapterPosition, popupEntity.name, newValue, popupEntity.isChecked
                         )
                     }
                 }
