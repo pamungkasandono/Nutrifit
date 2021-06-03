@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -68,7 +69,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="SELAMAT\nDATANG"
-            android:textAppearance="@style/TextBeranda.Title"
+            android:textAppearance="@style/TextStyleReguler.Title"
             app:layout_constraintStart_toStartOf="@+id/framelayout2"
             app:layout_constraintTop_toTopOf="@+id/framelayout2" />
 
@@ -78,7 +79,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:text="Yuk cek nutrisi\nmakanan kita\ndisini!"
-            android:textAppearance="@style/TextBeranda.SubTitle"
+            android:textAppearance="@style/TextStyleReguler.SubTitle"
             app:layout_constraintBottom_toBottomOf="@+id/framelayout2"
             app:layout_constraintStart_toStartOf="@+id/framelayout2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -170,16 +171,39 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/corner_rad_10"
             android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/TextStyleReguler.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Your Daily Nutrition List"
+                android:textColor="@color/gray_8e_text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_history" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

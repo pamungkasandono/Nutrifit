@@ -14,9 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nutrifit">
+        <activity android:name=".ui.historydetail.HistoryActivity"></activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
+            android:label="@string/title_activity_settings" />
         <activity android:name=".ui.imagedetection.ImageDetection" />
         <activity android:name=".ui.form.FormInputActivity" />
         <activity android:name=".ui.form.FormUpdateActivity" />

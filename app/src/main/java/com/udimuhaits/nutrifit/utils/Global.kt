@@ -1,6 +1,7 @@
 package com.udimuhaits.nutrifit.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
@@ -11,14 +12,12 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-
-
-var SET_NUTRIFIT_ACCESS_TOKEN = ""
-
-val GET_NUTRIFIT_ACCESS_TOKEN = SET_NUTRIFIT_ACCESS_TOKEN
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun Context.userPreference(): SharedPreferences {
     return this.getSharedPreferences("UsersPreference", AppCompatActivity.MODE_PRIVATE)
@@ -68,3 +67,52 @@ fun Context.areYouSure(s: String): AlertDialog {
     }
     return alertDialog
 }
+
+// get current year、month and day
+
+fun getDate(opt: Int = 10): String {
+    val sdf = when (opt) {
+        1 -> SimpleDateFormat("yyyy")
+        0 -> SimpleDateFormat("MM")
+        else -> SimpleDateFormat("yyyy-MM-dd")
+    }
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    return sdf.format(Date())
+}
+
+@SuppressLint("SimpleDateFormat")
+fun String.stringToDate(): String {
+    //Instantiating the SimpleDateFormat class
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
+    //Parsing the given String to Date object
+    val date = formatter.parse(this)
+    Log.i("asdasd", "Date object value: $date")
+
+    val suffixes = arrayOf(
+        "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+        "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+        "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+        "th", "st"
+    )
+
+    val newDate = SimpleDateFormat("dd-MMMM-yyyy", Locale.US).format(date)
+    val date1 = newDate.split("-")
+    Log.i(
+        "asdasd date1",
+        "${date1[0].toInt()}${suffixes[date1[0].toInt()]} ${date1[1]} ${date1[2]}"
+    )
+
+    return "${date1[0].toInt()}${suffixes[date1[0].toInt()]} ${date1[1]} ${date1[2]}"
+}
+
+
+
+
+
+
+
+
+
+
+
+

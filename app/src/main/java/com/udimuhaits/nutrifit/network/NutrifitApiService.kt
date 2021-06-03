@@ -1,10 +1,7 @@
 package com.udimuhaits.nutrifit.network
 
 import com.udimuhaits.nutrifit.BuildConfig
-import com.udimuhaits.nutrifit.data.ResponseImageML
-import com.udimuhaits.nutrifit.data.UserBody
-import com.udimuhaits.nutrifit.data.UserProfile
-import com.udimuhaits.nutrifit.data.UserResponse
+import com.udimuhaits.nutrifit.data.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -42,4 +39,20 @@ interface NutrifitApiService {
     fun uploadImage(
         @Part image_url: MultipartBody.Part
     ): Call<ResponseImageML>
+
+    @POST("api/dailyconsumption/")
+    fun postHistory(@Body data: List<FoodDataDailyConsumptionItem>): Call<List<FoodDataDailyConsumptionItem>>
+
+    @GET("api/journey/{user_id}/monthlyfood/{year}/{month}")
+    fun getHistory(
+        @Path("user_id") user_id: Int,
+        @Path("year") year: String,
+        @Path("month") month: String
+    ): Call<List<ResponseItem>>
+
+    @GET("api/journey/{user_id}/{full_date}")
+    fun getHistoryDetail(
+        @Path("user_id") user_id: Int,
+        @Path("full_date") fullDate: String
+    ): Call<List<ResponseJourneyItem>>
 }

@@ -15,8 +15,8 @@ import com.udimuhaits.nutrifit.databinding.ActivitySplashBinding
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.getstarted.ContainerActivity
-import com.udimuhaits.nutrifit.ui.getstarted.StartedFragment
 import com.udimuhaits.nutrifit.ui.getstarted.StartedFragment.Companion.PREFS_STARTED
+import com.udimuhaits.nutrifit.ui.historydetail.HistoryActivity
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginActivity
 import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_LOGIN
@@ -67,10 +67,14 @@ class SplashActivity : AppCompatActivity() {
         val isSave = sharedPreferences.getBoolean("isSave", false)
         val isHome = sharedPreferences.getBoolean("isHome", false)
 
+
         if (!isStarted) {
             navigateToContainer()
         } else if (!isLogin || isLogout) {
-            navigateToLogin()
+//         for developing
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+//            navigateToLogin()
         } else if (!isSave) {
             navigateToForm()
         } else if (isHome || isSave) {

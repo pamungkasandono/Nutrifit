@@ -22,6 +22,7 @@ import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormInputBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
+import com.udimuhaits.nutrifit.utils.getDate
 import com.udimuhaits.nutrifit.utils.userPreference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,6 +77,7 @@ class FormInputActivity : AppCompatActivity() {
             // set token to prefrence
             this.userPreference().edit().apply {
                 putString("token", users.accessToken.toString())
+                users.userId?.let { putInt("user_id", it) }
                 apply()
             }
 
@@ -106,6 +108,12 @@ class FormInputActivity : AppCompatActivity() {
                     weight.toDouble(),
                     users.profilePic
                 )
+//                val kalori_harian = 88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt()) - (5.8 * (getDate() - birthDate))
+
+//                this.userPreference().edit().apply {
+//                    putString("kalori_harian", )
+//                    apply()
+//                }
             }
         })
 

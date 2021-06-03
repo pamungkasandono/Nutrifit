@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.udimuhaits.nutrifit.R
@@ -30,12 +31,13 @@ import com.udimuhaits.nutrifit.ui.detail.DetailActivity
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity.Companion.PREFS_SAVE
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.ListManualEntity
+import com.udimuhaits.nutrifit.ui.home.history.HistoryAdapter
+import com.udimuhaits.nutrifit.ui.home.history.HistoryViewModel
 import com.udimuhaits.nutrifit.ui.imagedetection.ImageDetection
 import com.udimuhaits.nutrifit.ui.settings.SettingsActivity
-import com.udimuhaits.nutrifit.utils.forcePortrait
-import com.udimuhaits.nutrifit.utils.toast
-import com.udimuhaits.nutrifit.utils.toastLong
-import com.udimuhaits.nutrifit.utils.writeIsGranted
+import com.udimuhaits.nutrifit.utils.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 @SuppressLint("SetTextI18n")
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
@@ -57,6 +59,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var dialog: AlertDialog
     private var setDisabledState: Boolean = false
     private var clicked = false
+    private lateinit var viewModel: HistoryViewModel
+    private val historyAdapter = HistoryAdapter()
 
     private val fromBottom: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -71,6 +75,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         )
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -84,18 +89,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ), 10
             )
-/*
-            Snackbar.make(
-                uploadBinding.root, "Camera not have permission", Snackbar.LENGTH_INDEFINITE
-            )
-                .setAction("How") {
-                    Toast.makeText(
-                        this,
-                        "Anda perlu buka perngaturan -> aplikasi -> Nutrifit -> Izin -> Penyimpanan",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }.show()
-*/
+        }
+
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[HistoryViewModel::class.java]
+
+        viewModel.getHistory(this).observe(this) {
+            Log.i("asdasd", it.toString())
+            historyAdapter.setData(it)
+            historyAdapter.notifyDataSetChanged()
+        }
+
+//        viewModel.getLatestFeed()
+
+        with(binding.recyclerViewHistory) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = historyAdapter
         }
 
         arrayListManual.add(ListManualEntity("cake", 2))
@@ -105,17 +117,18 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         sharedPreferences = this.getSharedPreferences(PREFS_SAVE, Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
             putBoolean("isHome", true)
-            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
-            Glide.with(applicationContext)
-                .load(imageUser)
-                .into(binding.imgProfile)
-            apply()
+            val imageUser = sharedPreferences.getString("saveImage", null)
+            if (imageUser != null) {
+                Glide.with(applicationContext)
+                    .load(imageUser)
+                    .into(binding.imgProfile)
+                apply()
+            }
         }
 
         // fix portrait
         forcePortrait(this)
 
-        var visibilityButtonState = true
         binding.imgProfile.setOnClickListener {
             onAddButtonClick()
         }
@@ -294,6 +307,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     result.isNotEmpty() -> {
                         Intent(this, DetailActivity::class.java).apply {
                             putExtra(DetailActivity.QUERY, result)
+                            putExtra(DetailActivity.ARRAYLIST, arrayListManual)
                             putExtra(DetailActivity.WITH_IMAGE, false)
                             startActivityForResult(this, FROM_DETAIL)
                         }
@@ -313,10 +327,19 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 FROM_DETAIL -> {
                     if (data?.getBooleanExtra("isSuccess", false) == true) {
                         this.toast("success")
-                        arrayListManual.clear()
-                        dialogManualAdapter.setData(arrayListManual)
-                        dialogManualAdapter.notifyDataSetChanged()
+//                        viewModel.getHistory(this).observe(this) {
+//                            Log.i("asdasd", it.toString())
+//                            Toast.makeText(this, "loaded", Toast.LENGTH_SHORT).show()
+//                            historyAdapter.setData(it)
+//                            historyAdapter.notifyDataSetChanged()
+//                        }
+                        finish()
+                        startActivity(intent)
+                        this.toastLong("reloaded")
                     }
+                    arrayListManual.clear()
+                    dialogManualAdapter.setData(arrayListManual)
+                    dialogManualAdapter.notifyDataSetChanged()
                 }
                 FROM_IMAGE_DETECTION -> {
                     val status = data?.getBooleanExtra("isSuccess", false)

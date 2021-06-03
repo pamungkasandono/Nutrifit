@@ -54,6 +54,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
     private val limitMenuItem = 15
     private lateinit var imageMenuData: ArrayList<ImageMenuListData>
     private lateinit var imagePath: String
+    private var imageID: String? = null
     private val arrTempName = arrayListOf<String>()
     private val alreadyData = arrayListOf<String>()
     private lateinit var alertDialog: AlertDialog
@@ -231,8 +232,6 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
             this.toast("Token kosong")
         }
 
-//        val token =
-//            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MjIyNzQxLCJqdGkiOiJlOGY3YWI5ODRlZTM0NDM2OWE0NmM0MjM2OTBhNTVkYyIsInVzZXJfaWQiOjQ2fQ.WiK55mRRLHUTkrlP4QZ4O_Z0mSGmgD3Uh0FSuyOIlfw"
         NutrifitApiConfig.getNutrifitApiService(token).uploadImage(
             MultipartBody.Part.createFormData("image_url", file.name, body)
         ).enqueue(object : Callback<ResponseImageML> {
@@ -273,6 +272,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     resources.getString(R.string.str_result_s, responsePrediction)
 
                 imagePath = response.body()?.imageProperty?.imageUrl.toString()
+                imageID = response.body()?.imageProperty?.id.toString()!!
             }
 
             override fun onFailure(call: Call<ResponseImageML>, t: Throwable) {
@@ -455,6 +455,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                             putExtra(DetailActivity.QUERY, result)
                             putExtra(DetailActivity.WITH_IMAGE, true)
                             putExtra(DetailActivity.IMAGE_PATH, imagePath)
+                            putExtra(DetailActivity.IMAGE_ID, imageID)
                             startActivityForResult(this, HomeActivity.FROM_DETAIL)
                             finish()
                         }

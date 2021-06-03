@@ -13,8 +13,8 @@
     <string name="txt_calories">Calories</string>
     <string name="txt_protein">Protein</string>
     <string name="txt_serving_size">Serving Size</string>
-    <string name="txt_carbo">Carbohydrates Total</string>
-    <string name="txt_fat_total">Fat Total</string>
+    <string name="txt_carbo">Carbohydrates</string>
+    <string name="txt_fat_total">Fat</string>
     <string name="dummy_text_hamburger">Hamburger</string>
     <string name="img_desc_info_button">Info button</string>
     <string name="txt_cholesterol">Cholesterol</string>
@@ -45,4 +45,7 @@
     <string name="setting">Setting</string>
     <string name="dialog_title_logout">Logout</string>
     <string name="update_profile">Update Profile</string>
+    <string name="string_you_have_eaten">%s you have eaten:</string>
+    <string name="string_more_detail_with_your_food_journey_s">More detail with your food journey %s.</string>
+    <string name="string_this_day_you_have_eat_about_s_foods_beverages_nwith_total_calories_is_scal">This day you have eat about %s foods/beverages\nWith total calories is %s cal</string>
 </resources>

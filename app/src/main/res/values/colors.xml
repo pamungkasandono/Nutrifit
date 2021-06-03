@@ -8,6 +8,7 @@
     <color name="black">#000</color>
     <color name="black_700">#0e1111</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black_transparent">#B2000000</color>
 
     <!-- project accent color -->
     <color name="gray_ec">#ECECEC</color>
@@ -15,6 +16,8 @@
     <color name="gray_c4">#C4C4C4</color>
     <color name="gray_b0">#B0B0B0</color>
     <color name="gray_8e_text_dark">#8E8E8E</color>
+    <color name="orange_nutrifit">#FFB47D</color>
+    <color name="blue_transparent">#144386C3</color>
 
     <!-- detail item color -->
     <color name="item_lvl_1">#88FF7D</color>

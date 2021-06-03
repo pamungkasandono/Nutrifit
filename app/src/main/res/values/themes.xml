@@ -15,19 +15,24 @@
         <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>
     </style>
 
-    <style name="TextBeranda">
+    <style name="TextStyleReguler">
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/montserratregular</item>
         <item name="android:letterSpacing">0.14</item>
     </style>
 
-    <style name="TextBeranda.Title">
+    <style name="TextStyleReguler.Title">
         <item name="textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="TextBeranda.SubTitle">
+    <style name="TextStyleReguler.SubTitle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextStyleReguler.MediumTitle">
+        <item name="android:fontFamily">@font/montserratmedium</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -103,5 +108,10 @@
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:contentDescription">@string/img_desc_info_button</item>
         <item name="android:src">@drawable/ic_info</item>
+    </style>
+
+    <style name="FabLabel">
+        <item name="android:background">@drawable/bg_label_fab</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>
