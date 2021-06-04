@@ -70,7 +70,6 @@ class DetailActivity : AppCompatActivity() {
                 if (saveIt) {
                     saveToHistory()
                     newDataUpdated = true
-//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
                 }
                 finish()
             }
@@ -85,7 +84,6 @@ class DetailActivity : AppCompatActivity() {
                 if (saveIt) {
                     saveToHistory()
                     newDataUpdated = true
-//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
                 }
                 finish()
             }
@@ -104,8 +102,6 @@ class DetailActivity : AppCompatActivity() {
         imageID = intentData?.getString(IMAGE_ID, null)
         arrayMenuList =
             intentData?.getParcelableArrayList<MenuListEntity>(ARRAYLIST) as ArrayList<MenuListEntity>
-        this.toastLong("ARRAYLIST $arrayMenuList")
-        Log.d("asdasd ARRAYLIST", arrayMenuList.toString())
 
         if (isComeWithImage == true) {
             Glide.with(this)
@@ -116,10 +112,8 @@ class DetailActivity : AppCompatActivity() {
         }
 
         detailBinding.progressBar1.visibility = View.VISIBLE
-        // data dari viewModel di kirim ke adapter
         if (query != null) {
             viewModel.getListFood(query).observe(this) {
-                // data bakal di dapat dari sini jadi mapping array terjadi di sini
                 if (it.isEmpty()) {
                     detailBinding.fabOption1.visibility = View.GONE
                     saveIt = false
@@ -131,11 +125,8 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
-                Log.d("asdasd result", it.toString())
-                this.toast("done")
                 detailAdapter.setData(it)
                 detailAdapter.notifyDataSetChanged()
-                // save to history
                 arrayData.addAll(it)
                 isProsesLoadData = false
 
@@ -222,7 +213,6 @@ class DetailActivity : AppCompatActivity() {
                     if (saveIt) {
                         saveToHistory()
                         newDataUpdated = true
-//                        setResult(HomeActivity.IMAGE_SAVE_CODE)
                     }
                     Intent().apply {
                         this.putExtra("isSuccess", newDataUpdated)
@@ -245,10 +235,6 @@ class DetailActivity : AppCompatActivity() {
         val userID = this.userPreference().getInt("user_id", 0)
 
         for (item in arrayData.indices) {
-            Log.i(
-                "asdasd true/false",
-                "${arrayData[item].name} == ${arrayMenuList[item].name} ${arrayData[item].name == arrayMenuList[item].name}"
-            )
             if (arrayData[item].name == arrayMenuList[item].name) {
                 foodDataDailyConsumptionItem.add(
                     FoodDataDailyConsumptionItem(
@@ -305,14 +291,12 @@ class DetailActivity : AppCompatActivity() {
                 response: Response<List<FoodDataDailyConsumptionItem>>
             ) {
                 this@DetailActivity.toastLong(response.code().toString())
-                Log.i("asdasd code", response.code().toString())
             }
 
             override fun onFailure(
                 call: Call<List<FoodDataDailyConsumptionItem>>, t: Throwable
             ) {
                 this@DetailActivity.toast(t.message.toString())
-                Log.i("asdasd", t.message.toString())
             }
         })
     }

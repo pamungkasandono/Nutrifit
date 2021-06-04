@@ -40,7 +40,6 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         private lateinit var tooltipManager: ToolTipsManager
         fun bind(CN: CNEntity) {
-            // langsung hajar masukin data CN ke dalam view
             with(binding) {
                 foodTitle.text = CN.name
                 tvDataServingSize.text =
@@ -62,41 +61,36 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                 btnInfoServing.setOnClickListener {
                     val viewAnchor = btnInfoServing
-                    val msg = "this the weight of 1 serving"
+                    val msg = "This is total serving of your food (in grams)."
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCalories.setOnClickListener {
                     val viewAnchor = btnInfoCalories
                     val msg =
-                        "Kalori harian anda ${CN.calories}"
-                    // dari usia, tinggi badan, berat badan, jenis kelamin
-                    /*
-                    * misal pria usia 17 tahun
-                    * kalori secara default
-                    * tinggi ideal = 160cm
-                    * berat ideal = 50-56
-                    *
-                    * */
+                        "Calorie is a unit of energy, or the amount of energy obtained from food and/or drink."
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoProtein.setOnClickListener {
                     val viewAnchor = btnInfoProtein
-                    val msg = "Protein contoh ${CN.proteinG}"
+                    val msg =
+                        "Protein is a macronutrient that is essential to building muscle mass."
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCarbo.setOnClickListener {
                     val viewAnchor = btnInfoCarbo
-                    val msg = "Total karbohidrat dari makanan anda ${CN.carbohydratesTotalG}"
+                    val msg =
+                        "Carbohydrates are the main nutrients, the body needs along with protein and fat"
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoFat.setOnClickListener {
                     val viewAnchor = btnInfoFat
-                    val msg = "Total lemak dari makanan anda ${CN.fatTotalG}"
+                    val msg = "Fats are needed as reserve energy for our body."
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCholesterol.setOnClickListener {
                     val viewAnchor = btnInfoCholesterol
-                    val msg = "Kolesterol dari makanan yang anda makan ${CN.cholesterolMg}"
+                    val msg =
+                        "Cholesterol is important for making a number of important hormones, including the stress hormone cortisol."
                     displayTooltip(viewAnchor, msg)
                 }
             }

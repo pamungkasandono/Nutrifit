@@ -67,15 +67,15 @@ class SplashActivity : AppCompatActivity() {
 //            this.userPreference().edit().apply {
 //                putString(
 //                    "token",
-//                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MjIyNzQxLCJqdGkiOiJlOGY3YWI5ODRlZTM0NDM2OWE0NmM0MjM2OTBhNTVkYyIsInVzZXJfaWQiOjQ2fQ.WiK55mRRLHUTkrlP4QZ4O_Z0mSGmgD3Uh0FSuyOIlfw"
+//                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg1MDAwMDIxLCJqdGkiOiI3YzE1ZTFjNjY0ZmE0NDczYmFiMWI3Mjc5N2E5ODZlNSIsInVzZXJfaWQiOjE5OX0.3Wgqi37xcWqh7tRkvTCAdYIOydaMPCwZBXcJsbSaww4"
 //                )
-//                putInt("user_id", 46)
+//                putInt("user_id", 199)
 //                apply()
 //            }
 //
-//            val weight = "45"
-//            val height = "155"
-//            val birthDate = "1999/12/25"
+//            val weight = "55"
+//            val height = "170"
+//            val birthDate = "2000-02-20"
 //
 //            val dailyCalories = (88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt())
 //                    - (5.8 * getAgeByBirthDate(birthDate).toInt()))
@@ -87,7 +87,7 @@ class SplashActivity : AppCompatActivity() {
 //                putFloat("dailyCalories", dailyCalories.toFloat())
 //                apply()
 //            }
-//
+
 //            startActivity(Intent(this, HomeActivity::class.java))
 //            finish()
 

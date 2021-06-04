@@ -232,11 +232,6 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
 
     override fun onProgressUpdate(percentage: Int) {
         imageBinding.progressBar.progress = percentage
-//        uploadBinding.response.apply {
-//            post {
-//                this.text = percentage.toString()
-//            }
-//        }
     }
 
     private fun imageMenuDialog(menuDataList: ArrayList<MenuListEntity>) {
@@ -281,15 +276,9 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     newData.add(MenuListEntity(data.name, data.value, this.isChecked))
                 }
 
-                Log.d("asdasd old", menuData.toString())
-                Log.d("asdasd new", newData.toString())
                 imageListAdapter.setData(newData)
-                // assign new data to local
                 menuData = newData
-                // assign new data to global
                 this@ImageDetection.imageMenuList = newData
-                Log.d("asdasd local", menuData.toString())
-                Log.d("asdasd global", this@ImageDetection.imageMenuList.toString())
                 imageListAdapter.notifyDataSetChanged()
             }
         }
@@ -384,7 +373,6 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                             putExtra(DetailActivity.WITH_IMAGE, true)
                             putExtra(DetailActivity.IMAGE_PATH, imagePath)
                             putExtra(DetailActivity.IMAGE_ID, imageID)
-//                            startActivityForResult(this, HomeActivity.FROM_DETAIL)
                             addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                             startActivity(this)
                             finish()
@@ -415,13 +403,9 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     val bm2 = BitmapFactory.decodeStream(inputStream)
                     val fileName = contentResolver.getFileName(uriSelectedImage!!)
                     val file = File(cacheDir, fileName)
-                    Log.d("asdasd fileName", fileName)
-                    Log.d("asdasd inputStream", inputStream.toString())
                     val outputStream = FileOutputStream(file)
                     bm2.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
 
-                    // cek size
-//                    val fileSize = File(uriSelectedImage)
                     inputStream.copyTo(outputStream)
                     inputStream.close()
                     outputStream.close()
@@ -432,15 +416,12 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     val takenImage = data?.extras?.get("data") as Bitmap
                     imageBinding.imageView.setImageBitmap(takenImage)
 
-                    // bikin folder
                     val dir =
                         File(Environment.getExternalStorageDirectory().absolutePath + "/Nutrifit/Pictures/")
                     dir.mkdirs()
 
-                    Log.d("asdasd dir", dir.toString())
 
                     val outFile = File(dir, "image_${System.currentTimeMillis()}.jpg")
-                    Log.d("asdasd outFile", outFile.toString())
                     val outputStream: FileOutputStream?
                     try {
                         outputStream = FileOutputStream(outFile)

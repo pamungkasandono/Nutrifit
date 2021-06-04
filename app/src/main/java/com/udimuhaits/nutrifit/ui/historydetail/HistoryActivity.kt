@@ -42,7 +42,6 @@ class HistoryActivity : AppCompatActivity() {
         harianCalories = this.userPreference().getFloat("dailyCalories", 10F)
 
         val intentData = intent.extras?.getString("date")
-//        val intentData = "2021-06-02".stringToDate()
         hisBind.title.text = resources.getString(
             R.string.string_you_have_eaten,
             if (intentData == getDate()) "Today" else "On ${intentData?.stringToDate()},"
@@ -66,8 +65,6 @@ class HistoryActivity : AppCompatActivity() {
         )[HistoryDetailViewModel::class.java]
 
         viewModel.getHistoryDetail(this, intentData).observe(this) {
-            Log.d("asdasd result", it.toString())
-            this.toast("done")
             historyDetailAdapter.setData(it)
             historyDetailAdapter.notifyDataSetChanged()
 
@@ -140,27 +137,9 @@ class HistoryActivity : AppCompatActivity() {
             adapter = historyDetailAdapter
         }
 
-        // dummy data
-        // di bawah hasil perhitungan
-        /*   val normalServingSize = 0
-           // Kalori normal harian pria dewasa
-           val normalCalories = 2500
-           // Manusia membutuhkan karbohidrat sebanyak 45-65 persen dari total kalori yang didapatkan tiap hari.
-           // perhitungan di bawah masih ambigu
-           val normalCarbo = (50 / 100) * normalCalories
-           val normalProtein = (20 / 100) * normalCalories
-           val normalFatTotal = (30 / 100) * normalCalories
-           // Rata-rata orang membutuhkan 1100 miligram kolesterol per hari. Pada kebanyakan orang, 70–75 persen asupan kolesterol biasanya diproduksi oleh organ hati, sedangkan sisanya didapat dari makanan yang dikonsumsi sehari-hari.
-           val normalCholesterol = 1100 / 1000*/
-
-        // dummy nutrisi harian
-
     }
 
     private fun chartBar(harianCarbo: Float, harianProtein: Float, harianFatTotal: Float) {
-        // val harianCarbo = carbohydrate / harianCalories * 100
-        // val harianProtein = protein / harianCalories * 100
-        // val harianFatTotal = fat / harianCalories * 100
 
         this@HistoryActivity.toastLong("Carbo $harianCarbo")
         this@HistoryActivity.toastLong("Protein $harianProtein")
@@ -226,12 +205,5 @@ class HistoryActivity : AppCompatActivity() {
 
         barChart.groupBars(0f, groupSpace, barSpace)
         barChart.animateXY(100, 500)
-
-//                    val normalBarDataSet = BarDataSet(normal, "Normal")
-//                    val harianBarDataSet = BarDataSet(harian, "Daily")
-//
-//                    barChart.notifyDataSetChanged()
-//                    barChart.data = BarData(normalBarDataSet, harianBarDataSet)
-//                    barChart.invalidate()
     }
 }

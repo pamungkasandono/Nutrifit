@@ -1,6 +1,5 @@
 package com.udimuhaits.nutrifit.ui.imagedetection.dialogmenu
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,6 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
     fun setData(item: ArrayList<MenuListEntity>) {
         mData.clear()
         mData.addAll(item)
-        Log.d("asdasd", mData.toString())
     }
 
     fun setOnDataChangeListener(interfaceListener: InterfaceListener) {
@@ -56,18 +54,9 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
                 }
 
                 if (itemCheckedCount == mData.size) {
-                    // jika per item ter ceklis semua
                     checkedListener.onAllChecked(true)
-//                    Toast.makeText(root.context, "All item checked manually", Toast.LENGTH_SHORT).show()
                 } else {
                     checkedListener.onAllChecked(false)
-//                    Toast.makeText(root.context, "Some item not checked", Toast.LENGTH_SHORT).show()
-                }
-
-                // jika proses sudah selesai maka set itemCheckedCount ke 0
-                if ((adapterPosition + 1) == mData.size) {
-                    itemCheckedCount = 0
-                    Log.d("asdasd", "process done")
                 }
 
                 checkBox2.setOnClickListener {

@@ -46,7 +46,6 @@ class HistoryDetailViewModel : ViewModel() {
                         response: Response<List<ResponseJourneyItem>>
                     ) {
                         if (response.isSuccessful) {
-                            //                        Log.i("asdasd response", response.body().toString())
                             _historyItem.postValue(response.body())
                         }
                     }

@@ -13,22 +13,14 @@ import com.udimuhaits.nutrifit.databinding.ItemHistoryBinding
 import com.udimuhaits.nutrifit.ui.historydetail.HistoryActivity
 import com.udimuhaits.nutrifit.utils.getDate
 
-
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     private var mHistoryResponse = ArrayList<ItemHistoryEntity>()
-    private var testCount = 0
-//    private lateinit var clickListener: InterfaceListener
 
     fun setData(list: List<ItemHistoryEntity>?) {
         if (list == null) return
         this.mHistoryResponse.clear()
-        Log.d("asdasd History", list.toString())
         this.mHistoryResponse.addAll(list)
     }
-
-//    fun getClickListener(interfaceListener: InterfaceListener) {
-////        this.clickListener = interfaceListener
-//    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -49,14 +41,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
         RecyclerView.ViewHolder(binding.root) {
         fun bind(HR: ItemHistoryEntity) {
             with(binding) {
-                Log.i("asdasd got history", HR.toString())
-//                if (HR.dateTimeConsumed == dateTemp) {
-//                    historyTitleItem.append("$comma${HR.foodName}")
-//                    comma = ", "
-//                } else {
-//                    dateTemp = HR.dateTimeConsumed
-//                    historyTitleItem.text = HR.foodName
-//                }
                 when {
                     getDate() == HR.date -> {
                         textViewToday.visibility = View.VISIBLE
@@ -76,7 +60,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
                 }
 
                 imageView.setOnClickListener {
-                    // clickListener.onClicked(adapterPosition, HR.date)
                     Intent(itemView.context, HistoryActivity::class.java).apply {
                         this.putExtra("date", HR.date)
                         itemView.context.startActivity(this)
@@ -93,15 +76,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
                     .load(HR.imagePath)
                     .error(R.drawable.img_no_avaliable)
                     .into(imageView)
-
-                if ((adapterPosition + 1) == mHistoryResponse.size) {
-                    Log.d("asdasd", "process done awal 0 akhir ${testCount++}")
-                }
             }
         }
-    }
-
-    interface InterfaceListener {
-        fun onClicked(position: Int, date: String)
     }
 }

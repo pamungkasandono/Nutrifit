@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -86,7 +85,6 @@ fun String.stringToDate(): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd")
     //Parsing the given String to Date object
     val date = formatter.parse(this)
-    Log.i("asdasd", "Date object value: $date")
 
     val suffixes = arrayOf(
         "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
@@ -97,17 +95,12 @@ fun String.stringToDate(): String {
 
     val newDate = SimpleDateFormat("dd-MMMM-yyyy", Locale.US).format(date)
     val date1 = newDate.split("-")
-    Log.i(
-        "asdasd date1",
-        "${date1[0].toInt()}${suffixes[date1[0].toInt()]} ${date1[1]} ${date1[2]}"
-    )
 
     return "${date1[0].toInt()}${suffixes[date1[0].toInt()]} ${date1[1]} ${date1[2]}"
 }
 
 fun getAgeByBirthDate(birthDate: String): String {
-//    val birthDate = "1999/12/25"
-    val arrayBirthDate = birthDate.split("/")
+    val arrayBirthDate = birthDate.split("-")
 
     val dob = Calendar.getInstance()
     val today = Calendar.getInstance()

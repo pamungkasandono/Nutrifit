@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
@@ -87,7 +86,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         fAuth = FirebaseAuth.getInstance()
 
         if (this.writeIsGranted()) {
-            // Permission is not granted
             ActivityCompat.requestPermissions(
                 this, arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -102,7 +100,14 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         )[HistoryViewModel::class.java]
 
         viewModel.getHistory(this).observe(this) {
-            Log.i("asdasd", it.toString())
+            if (it.isEmpty()) {
+                binding.textView7.visibility = View.VISIBLE
+                binding.recyclerViewHistory.visibility = View.GONE
+            } else {
+                binding.textView7.visibility = View.GONE
+                binding.recyclerViewHistory.visibility = View.VISIBLE
+            }
+
             historyAdapter.setData(it)
             historyAdapter.notifyDataSetChanged()
         }
@@ -112,16 +117,19 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             setHasFixedSize(true)
             adapter = historyAdapter
         }
-//
-//        arrayMenuList.add(ListManualEntity("cake", 2))
-//        arrayMenuList.add(ListManualEntity("rice", 1))
-//        arrayMenuList.add(ListManualEntity("fries", 1))
+
+        binding.refreshHistory.setOnRefreshListener {
+            arrayMenuList.clear()
+            dialogManualAdapter.setData(arrayMenuList)
+            dialogManualAdapter.notifyDataSetChanged()
+            finish()
+            startActivity(intent)
+        }
 
         getImageFromForm()
 
         getImageFromLogin()
 
-        // fix portrait
         forcePortrait(this)
 
         binding.imgProfile.setOnClickListener {
@@ -148,16 +156,13 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         val extraFromDetail = intent.extras
 
         if (extraFromDetail?.getString("fab_code") == "image") {
-            this.toast("open image")
             intent.removeExtra("fab_code")
             selectImage()
         } else if (extraFromDetail?.getString("fab_code") == "manual") {
-            this.toast("open manual")
             intent.removeExtra("fab_code")
             manualDialog(arrayMenuList)
         }
 
-        //./ end of perubahan
     }
 
     private fun getImageFromLogin() {
@@ -228,7 +233,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         dialogImageOptionsBinding.selectGallery.setOnClickListener {
             if (this.writeIsGranted()) {
-                // Permission is not granted
                 this.toastLong("To use this feature you have to grant the permission!")
             } else {
                 Intent(this, ImageDetection::class.java).apply {
@@ -241,7 +245,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         dialogImageOptionsBinding.selectCamera.setOnClickListener {
             if (this.writeIsGranted()) {
-                // Permission is not granted
                 this.toastLong("To use this feature you have to grant the permission!")
             } else {
                 Intent(this, ImageDetection::class.java).apply {
@@ -267,15 +270,11 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         dialogAddManual.setTitle(resources.getString(R.string.what_do_you_want_to_eat_today))
         dialogAddManual.show()
 
-        // handling kalau arraynya kosong
         if (arrayManualList.size >= 1) {
             dialogManualAdapter.setData(arrayManualList)
             dialogManualAdapter.notifyDataSetChanged()
-        } else {
-            this.toast("No data yet.")
         }
 
-        // cek jika array penuh
         if (arrayMenuList.size >= limitTotalMenu) {
             menuManualBinding.inputMenuSection.apply {
                 this.visibility = View.INVISIBLE
@@ -283,16 +282,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        // set disable state
         setDisable()
 
-        // button check to add new item
         menuManualBinding.btnAddNewItem.setOnClickListener(this)
 
-        // button red minus to close the adding new item box section
         menuManualBinding.btnCancelAdding.setOnClickListener(this)
 
-        // prevent keyboard from hiding automatically
         menuManualBinding.inputItemName.setOnEditorActionListener { _, _, _ ->
             if (setDisable()) {
                 addNewItem()
@@ -300,10 +295,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             true
         }
 
-        // button to save the data to convert from array to string
         menuManualBinding.btnSaveData.setOnClickListener(this)
 
-        // listener on delete array and update the data list
         dialogManualAdapter.setOnDeleteListener(object : DialogManualAdapter.InterfaceListener {
             override fun onDeleteClick(position: Int) {
                 if (arrayManualList.size >= limitTotalMenu) {
@@ -319,7 +312,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        // listener to increase the value and update the data list
         dialogManualAdapter.setOnDataChangeListener(object : DialogManualAdapter.InterfaceListener {
             override fun onValueChange(position: Int, name: String, newValue: Int) {
                 arrayManualList[position] = MenuListEntity(name, newValue)
@@ -339,7 +331,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.btn_add_new_item -> addNewItem()
             R.id.btn_save_data -> {
-                // function to convert array to string
                 val result = arrayManualToString()
                 dialogAddManual.dismiss()
                 when {
@@ -360,22 +351,14 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            Log.d("asdasd requestcode", requestCode.toString())
-            toast("request code $requestCode")
             when (requestCode) {
-                IMAGE_SAVE_CODE -> {
-                    toast("IMAGE_SAVE_CODE Sukses")
-                }
                 FROM_DETAIL -> {
-                    this.toast("from detail")
                     if (data?.getBooleanExtra("isSuccess", false) == true) {
-                        this.toast("success")
                         arrayMenuList.clear()
                         dialogManualAdapter.setData(arrayMenuList)
                         dialogManualAdapter.notifyDataSetChanged()
                         finish()
                         startActivity(intent)
-                        this.toastLong("reloaded")
                     }
                     arrayMenuList.clear()
                     dialogManualAdapter.setData(arrayMenuList)
@@ -383,15 +366,11 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 FROM_IMAGE_DETECTION -> {
                     if (data?.getBooleanExtra("isSuccess", false) == true) {
-                        this.toast("success")
                         arrayMenuList.clear()
                         dialogManualAdapter.setData(arrayMenuList)
                         dialogManualAdapter.notifyDataSetChanged()
                         finish()
                         startActivity(intent)
-                        this.toastLong("reloaded")
-                    } else {
-                        this.toastLong("not loaded")
                     }
                 }
             }
@@ -399,7 +378,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setDisable(): Boolean {
-        // set default
         menuManualBinding.btnAddNewItem.apply {
             this.setColorFilter(Color.GRAY)
             this.isEnabled = false
