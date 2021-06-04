@@ -75,7 +75,7 @@ fun getDate(opt: Int = 10): String {
         0 -> SimpleDateFormat("MM")
         else -> SimpleDateFormat("yyyy-MM-dd")
     }
-    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    sdf.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
     return sdf.format(Date())
 }
 
