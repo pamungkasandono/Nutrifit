@@ -24,7 +24,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class DetailActivity : AppCompatActivity() {
     private lateinit var detailBinding: ActivityDetailBinding
     private var arrayData = ArrayList<CNEntity>()
@@ -286,7 +285,7 @@ class DetailActivity : AppCompatActivity() {
                 call: Call<List<FoodDataDailyConsumptionItem>>,
                 response: Response<List<FoodDataDailyConsumptionItem>>
             ) {
-                this@DetailActivity.toastLong(response.code().toString())
+                this@DetailActivity.toastLong("List added")
             }
 
             override fun onFailure(

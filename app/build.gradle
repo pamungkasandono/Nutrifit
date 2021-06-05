@@ -26,7 +26,7 @@ android {
         buildConfigField("String", "PUT_USER", '"api/profile/{id}/"')
         buildConfigField("String", "POST_IMAGE", '"api/uploadimage/prediction/yolov5s6"')
         buildConfigField("String", "SEARCH_OBJECT", '"nutrition/"')
-        buildConfigField("String", "API_KEY_CN", '"C3MdCBHlM3s/jwiIIMyEmA==q7ZibM5bKfBXJBB4"')
+        buildConfigField("String", "API_KEY_CN", '"v7t6BckDPaXCxj1uao1FRaFwc1LvtJbfmJ4sPkde"')
     }
 
     buildFeatures {

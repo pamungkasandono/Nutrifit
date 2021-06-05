@@ -134,15 +134,9 @@ class HistoryActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = historyDetailAdapter
         }
-
     }
 
     private fun chartBar(harianCarbo: Float, harianProtein: Float, harianFatTotal: Float) {
-
-        this@HistoryActivity.toastLong("Carbo $harianCarbo")
-        this@HistoryActivity.toastLong("Protein $harianProtein")
-        this@HistoryActivity.toastLong("Fat $harianFatTotal")
-
         barChart.description.isEnabled = false
         barChart.axisLeft.axisMaximum = 100f
         barChart.axisLeft.axisMinimum = 0f
