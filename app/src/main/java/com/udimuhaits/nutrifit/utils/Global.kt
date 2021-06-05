@@ -15,6 +15,7 @@ import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.udimuhaits.nutrifit.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +23,7 @@ fun Context.userPreference(): SharedPreferences {
     return this.getSharedPreferences("UsersPreference", AppCompatActivity.MODE_PRIVATE)
 }
 
+@SuppressLint("SourceLockedOrientationActivity")
 fun forcePortrait(activity: Activity) {
     val screenLayoutSize =
         activity.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
@@ -58,9 +60,9 @@ fun ContentResolver.getFileName(uri: Uri): String {
 fun Context.areYouSure(s: String): AlertDialog {
     val alertDialog = AlertDialog.Builder(this).create()
     alertDialog.apply {
-        setTitle("Are you sure")
+        setTitle(getString(R.string.are_you_sure))
         setMessage(s)
-        setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { dialog, _ ->
+        setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
     }
@@ -69,13 +71,14 @@ fun Context.areYouSure(s: String): AlertDialog {
 
 // get current year、month and day
 
+@SuppressLint("SimpleDateFormat")
 fun getDate(opt: Int = 10): String {
     val sdf = when (opt) {
         1 -> SimpleDateFormat("yyyy")
         0 -> SimpleDateFormat("MM")
         else -> SimpleDateFormat("yyyy-MM-dd")
     }
-    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    sdf.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
     return sdf.format(Date())
 }
 

@@ -63,34 +63,6 @@ class SplashActivity : AppCompatActivity() {
 
         if (!isStarted) {
             navigateToContainer()
-            //----------------- FOR DEVELOPING WITHOUT LOGIN -------------------//
-//            this.userPreference().edit().apply {
-//                putString(
-//                    "token",
-//                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg1MDAwMDIxLCJqdGkiOiI3YzE1ZTFjNjY0ZmE0NDczYmFiMWI3Mjc5N2E5ODZlNSIsInVzZXJfaWQiOjE5OX0.3Wgqi37xcWqh7tRkvTCAdYIOydaMPCwZBXcJsbSaww4"
-//                )
-//                putInt("user_id", 199)
-//                apply()
-//            }
-//
-//            val weight = "55"
-//            val height = "170"
-//            val birthDate = "2000-02-20"
-//
-//            val dailyCalories = (88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt())
-//                    - (5.8 * getAgeByBirthDate(birthDate).toInt()))
-//
-//            this.userPreference().edit().apply {
-//                putString("weight", weight)
-//                putString("height", height)
-//                putString("birthDate", birthDate)
-//                putFloat("dailyCalories", dailyCalories.toFloat())
-//                apply()
-//            }
-
-//            startActivity(Intent(this, HomeActivity::class.java))
-//            finish()
-
         } else if (!isLogin) {
             navigateToLogin()
         } else if (!isSave) {

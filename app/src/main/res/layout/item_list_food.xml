@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/robotoregular"
-            android:text="@string/dummy_text_hamburger"
+            tools:text="humberger"
             android:textColor="@color/black_700"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -103,7 +103,7 @@
             <TextView
                 android:id="@+id/tv_carbo"
                 style="@style/TextViewListItemDetail"
-                android:text="@string/txt_carbo"
+                android:text="@string/carbohydrate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -167,7 +167,7 @@
             <TextView
                 android:id="@+id/tv_fat"
                 style="@style/TextViewListItemDetail"
-                android:text="@string/txt_fat_total"
+                android:text="@string/fat"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -219,12 +219,6 @@
                 app:layout_constraintTop_toTopOf="@+id/btn_info_cholesterol" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="600dp"-->
-        <!--            android:background="@color/blue_500"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/constraintLayout6" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

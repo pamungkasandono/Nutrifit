@@ -11,12 +11,17 @@ class ContainerActivity : AppCompatActivity() {
 
         val mFragmentManager = supportFragmentManager
         val mIntroductionFragment = IntroductionFragment()
-        val introductionFragment = mFragmentManager.findFragmentByTag(IntroductionFragment::class.java.simpleName)
+        val introductionFragment =
+            mFragmentManager.findFragmentByTag(IntroductionFragment::class.java.simpleName)
 
         if (introductionFragment !is IntroductionFragment) {
             mFragmentManager
                 .beginTransaction()
-                .add(R.id.frame_container, mIntroductionFragment, IntroductionFragment::class.java.simpleName)
+                .add(
+                    R.id.frame_container,
+                    mIntroductionFragment,
+                    IntroductionFragment::class.java.simpleName
+                )
                 .commit()
         }
     }

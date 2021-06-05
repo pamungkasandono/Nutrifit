@@ -3,7 +3,6 @@ package com.udimuhaits.nutrifit.ui.historydetail
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityHistoryBinding
 import com.udimuhaits.nutrifit.utils.*
-
 
 class HistoryActivity : AppCompatActivity() {
     private lateinit var hisBind: ActivityHistoryBinding
@@ -44,11 +42,11 @@ class HistoryActivity : AppCompatActivity() {
         val intentData = intent.extras?.getString("date")
         hisBind.title.text = resources.getString(
             R.string.string_you_have_eaten,
-            if (intentData == getDate()) "Today" else "On ${intentData?.stringToDate()},"
+            if (intentData == getDate()) getString(R.string.today) else "${getString(R.string.on)} ${intentData?.stringToDate()},"
         )
         hisBind.title1.text = resources.getString(
             R.string.string_more_detail_with_your_food_journey_s,
-            "On ${intentData?.stringToDate()}"
+            "${getString(R.string.on)} ${intentData?.stringToDate()}"
         )
 
         hisBind.subTitle1.text =

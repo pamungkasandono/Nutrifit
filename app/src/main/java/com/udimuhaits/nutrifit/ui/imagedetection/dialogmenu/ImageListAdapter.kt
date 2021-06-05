@@ -3,6 +3,7 @@ package com.udimuhaits.nutrifit.ui.imagedetection.dialogmenu
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ItemMenuImageBinding
 import com.udimuhaits.nutrifit.utils.toast
@@ -68,7 +69,7 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
                 btnIncrease.setOnClickListener {
                     val newValue = popupEntity.value + 1
                     if (newValue > 10) {
-                        root.context.toast("maximum porsi")
+                        root.context.toast(itemView.context.getString(R.string.max_portion))
                     } else {
                         changeListener.onSomeDataClicked(
                             adapterPosition, popupEntity.name, newValue, popupEntity.isChecked
@@ -79,7 +80,7 @@ class ImageListAdapter : RecyclerView.Adapter<ImageListAdapter.ImageListViewHold
                 btnDecrease.setOnClickListener {
                     val newValue = popupEntity.value - 1
                     if (newValue < 1) {
-                        root.context.toast("minimum portion is 1")
+                        root.context.toast(itemView.context.getString(R.string.min_portion))
                     } else {
                         changeListener.onSomeDataClicked(
                             adapterPosition, popupEntity.name, newValue, popupEntity.isChecked

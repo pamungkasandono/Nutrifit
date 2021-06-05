@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -12,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:visibility="gone"
         android:layout_marginTop="8dp"
-        android:text="Today" />
+        android:text="@string/today" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -24,7 +25,8 @@
         android:adjustViewBounds="true"
         android:visibility="gone"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_havent_eat" />
+        android:src="@drawable/ic_havent_eat"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView_yesterday_2"
@@ -33,7 +35,7 @@
         android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Yesterday and so on" />
+        android:text="@string/yesterday_and_so_on"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -64,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Apple, Lemon Juice, Water, Cake, Apple, Lemon Juice, Water, Cake,  " />
+                tools:text="Apple, Lemon Juice, Water, Cake, Apple, Lemon Juice, Water, Cake,  " />
 
             <TextView
                 android:id="@+id/history_date"
@@ -72,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_toEndOf="@id/history_title_item"
-                android:text="31/05/2021"
+                tools:text="31/05/2021"
                 android:textAlignment="textEnd" />
 
             <ImageView
@@ -82,7 +84,8 @@
                 android:layout_below="@id/history_title_item"
                 android:layout_marginTop="4dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_no_avaliable" />
+                android:src="@drawable/img_no_avaliable"
+                tools:ignore="ContentDescription" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
@@ -94,6 +97,6 @@
         android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Yesterday and so on" />
+        android:text="@string/yesterday_and_so_on"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.udimuhaits.nutrifit.data.HistoryResponse
 import com.udimuhaits.nutrifit.data.ResponseJourneyItem
 import com.udimuhaits.nutrifit.network.NutrifitApiConfig
 import com.udimuhaits.nutrifit.utils.toast
@@ -18,8 +17,6 @@ import retrofit2.Response
 
 class HistoryDetailViewModel : ViewModel() {
 
-    private val _historyResponse = MutableLiveData<List<HistoryResponse>>()
-
     private val _historyItem = MutableLiveData<List<ResponseJourneyItem>>()
 
     fun getHistoryDetail(
@@ -30,7 +27,7 @@ class HistoryDetailViewModel : ViewModel() {
         val token = context.userPreference().getString("token", "")
 
         if (token == "") {
-            context.toast("Token kosong")
+            context.toast("Token is empty")
         }
 
         val userID = context.userPreference().getInt("user_id", 0)
@@ -51,7 +48,7 @@ class HistoryDetailViewModel : ViewModel() {
                     }
 
                     override fun onFailure(call: Call<List<ResponseJourneyItem>>, t: Throwable) {
-                        Log.i("asdasd error", t.message.toString())
+                        Log.i("error", t.message.toString())
                     }
                 })
         }

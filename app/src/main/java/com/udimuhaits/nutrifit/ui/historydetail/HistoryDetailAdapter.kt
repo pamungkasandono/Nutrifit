@@ -1,7 +1,6 @@
 package com.udimuhaits.nutrifit.ui.historydetail
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,6 @@ class HistoryDetailAdapter : RecyclerView.Adapter<HistoryDetailAdapter.DetailVie
     fun setData(list: List<ResponseJourneyItem>?) {
         if (list == null) return
         this.mResponseJourneyItem.clear()
-        Log.d("history data", list.toString())
         this.mResponseJourneyItem.addAll(list)
     }
 

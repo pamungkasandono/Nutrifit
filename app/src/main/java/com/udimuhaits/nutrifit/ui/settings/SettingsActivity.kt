@@ -66,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
 
         private fun showAlertDialogLogout() {
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(R.string.dialog_title_logout)
+            builder.setTitle(R.string.logout_title)
             builder.setMessage(R.string.logout_message)
             builder.setIcon(R.drawable.ic_logout)
             builder.setPositiveButton(R.string.yes) { dialogInterface, which ->
@@ -81,10 +81,17 @@ class SettingsActivity : AppCompatActivity() {
                             putBoolean("isLogin", false)
                             putBoolean("isSave", false)
                             fAuth.signOut()
-                            val intent = Intent(activity, LoginActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            val intent = Intent(
+                                activity,
+                                LoginActivity::class.java
+                            ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             startActivity(intent)
                             activity?.finish()
-                            Toast.makeText(activity, getString(R.string.success_logout), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                activity,
+                                getString(R.string.success_logout),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             apply()
                         }
@@ -92,7 +99,8 @@ class SettingsActivity : AppCompatActivity() {
                 })
             }
             builder.setNegativeButton(R.string.no) { dialogInterface, which ->
-                Toast.makeText(activity, getString(R.string.cancel_logout), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.cancel_logout), Toast.LENGTH_SHORT)
+                    .show()
             }
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCancelable(false)

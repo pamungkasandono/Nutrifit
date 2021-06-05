@@ -70,9 +70,9 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:text="SELAMAT\nDATANG"
+                android:text="@string/welcome"
                 android:textAppearance="@style/TextStyleReguler.Title"
                 app:layout_constraintStart_toStartOf="@+id/framelayout2"
                 app:layout_constraintTop_toTopOf="@+id/framelayout2" />
@@ -80,9 +80,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Yuk cek nutrisi\nmakanan kita\ndisini!"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="32dp"
+                android:text="@string/let_s_check_nour_food_nutrition_here"
                 android:textAppearance="@style/TextStyleReguler.SubTitle"
                 app:layout_constraintBottom_toBottomOf="@+id/framelayout2"
                 app:layout_constraintStart_toStartOf="@+id/framelayout2"
@@ -90,8 +90,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="173dp"
-                android:layout_height="157dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_marginEnd="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_logo_beranda"
@@ -125,7 +125,7 @@
                     android:paddingTop="10dp"
                     android:paddingEnd="14dp"
                     android:paddingBottom="10dp"
-                    android:text="Makan apa anda hari ini?"
+                    android:text="@string/what_do_you_want_to_eat_today"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/btn_search"
                     app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="16dp"
-                    android:text="Upload foto makanan anda"
+                    android:text="@string/upload_your_food_image_here"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/select_image"
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Your Daily Nutrition List"
+                    android:text="@string/your_daily_nutrition_list"
                     android:textColor="@color/gray_8e_text_dark"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -204,7 +204,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:gravity="center"
-                    android:text="You don't have a food history yet!"
+                    android:text="@string/you_don_t_have_a_food_history_yet"
                     android:textSize="15sp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -223,16 +223,6 @@
                     tools:listitem="@layout/item_history" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:text="Logout"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_profile" />
 
             <Button
                 android:id="@+id/btn_setting"

@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_update_profile"
             android:key="update_profile"
             app:summary="@string/update_profile_summary"
-            app:title="@string/update_profile_title" />
+            app:title="@string/update_profile" />
 
         <Preference
             android:icon="@drawable/ic_language"

@@ -160,7 +160,6 @@ class LoginActivity : AppCompatActivity() {
                 applicationContext,
                 HomeActivity::class.java
             ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.putExtra("success_login", getString(R.string.success_login))
             startActivity(intent)
             finish()
             apply()

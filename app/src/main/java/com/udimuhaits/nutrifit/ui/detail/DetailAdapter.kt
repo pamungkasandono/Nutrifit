@@ -61,36 +61,32 @@ class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
                 btnInfoServing.setOnClickListener {
                     val viewAnchor = btnInfoServing
-                    val msg = "This is total serving of your food (in grams)."
+                    val msg = itemView.context.getString(R.string.tooltip_calories)
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCalories.setOnClickListener {
                     val viewAnchor = btnInfoCalories
-                    val msg =
-                        "Calorie is a unit of energy, or the amount of energy obtained from food and/or drink."
+                    val msg = itemView.context.getString(R.string.tooltip_calories)
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoProtein.setOnClickListener {
                     val viewAnchor = btnInfoProtein
-                    val msg =
-                        "Protein is a macronutrient that is essential to building muscle mass."
+                    val msg = itemView.context.getString(R.string.tooltip_protein)
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCarbo.setOnClickListener {
                     val viewAnchor = btnInfoCarbo
-                    val msg =
-                        "Carbohydrates are the main nutrients, the body needs along with protein and fat"
+                    val msg = itemView.context.getString(R.string.tooltip_carbo)
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoFat.setOnClickListener {
                     val viewAnchor = btnInfoFat
-                    val msg = "Fats are needed as reserve energy for our body."
+                    val msg = itemView.context.getString(R.string.tooltip_fat)
                     displayTooltip(viewAnchor, msg)
                 }
                 btnInfoCholesterol.setOnClickListener {
                     val viewAnchor = btnInfoCholesterol
-                    val msg =
-                        "Cholesterol is important for making a number of important hormones, including the stress hormone cortisol."
+                    val msg = itemView.context.getString(R.string.tooltip_cholesterol)
                     displayTooltip(viewAnchor, msg)
                 }
             }

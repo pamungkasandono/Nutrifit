@@ -27,7 +27,7 @@ class HistoryViewModel : ViewModel() {
         val token = context.userPreference().getString("token", "")
 
         if (token == "") {
-            context.toast("Token kosong")
+            context.toast("Token is empty")
         }
 
         val userID = context.userPreference().getInt("user_id", 0)
@@ -41,15 +41,14 @@ class HistoryViewModel : ViewModel() {
                     response: Response<List<ResponseItem>>
                 ) {
                     if (response.isSuccessful) {
-                        val historyResponse = ArrayList<ItemHistoryEntity>()
-                        var testArray = ArrayList<FoodlistItem>()
+                        val testArray = ArrayList<FoodlistItem>()
 
                         for (i in response.body()!!) {
                             testArray.addAll(i.foodlist)
                         }
                         var tempDataTesArr = ""
                         var strFoodName = ""
-                        var arryTemp = ArrayList<ItemHistoryEntity>()
+                        val arryTemp = ArrayList<ItemHistoryEntity>()
                         var arryTempIdx = 0
                         var imgPathTemp: String? = null
                         var imgPathTempNew: String? = null
@@ -78,7 +77,7 @@ class HistoryViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<List<ResponseItem>>, t: Throwable) {
-                    Log.i("asdasd error", t.message.toString())
+                    Log.i("  error", t.message.toString())
                 }
             })
         return _historyItem

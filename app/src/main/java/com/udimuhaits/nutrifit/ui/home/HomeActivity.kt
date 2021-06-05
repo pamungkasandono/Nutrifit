@@ -46,7 +46,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
-        const val IMAGE_SAVE_CODE = 204
         const val PREFS_HOME = "sharedPrefHome"
     }
 
@@ -182,9 +181,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 .load(users.profilePic)
                 .into(binding.imgProfile)
         })
-
-        val message = intent.getStringExtra("success_login")
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun getImageFromForm() {
@@ -226,14 +222,14 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun selectImage() {
         dialogImageOption = AlertDialog.Builder(this).create()
-        dialogImageOption.setTitle("Choose your picture from")
+        dialogImageOption.setTitle(getString(R.string.choose_picture))
         val dialogImageOptionsBinding =
             DialogChooseImageBinding.inflate(LayoutInflater.from(this))
         dialogImageOption.setView(dialogImageOptionsBinding.root)
 
         dialogImageOptionsBinding.selectGallery.setOnClickListener {
             if (this.writeIsGranted()) {
-                this.toastLong("To use this feature you have to grant the permission!")
+                this.toastLong(getString(R.string.permission))
             } else {
                 Intent(this, ImageDetection::class.java).apply {
                     this.putExtra("youChoose", PICK_IMAGE)
@@ -245,7 +241,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         dialogImageOptionsBinding.selectCamera.setOnClickListener {
             if (this.writeIsGranted()) {
-                this.toastLong("To use this feature you have to grant the permission!")
+                this.toastLong(getString(R.string.permission))
             } else {
                 Intent(this, ImageDetection::class.java).apply {
                     this.putExtra("youChoose", TAKE_PICTURE)
@@ -300,7 +296,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         dialogManualAdapter.setOnDeleteListener(object : DialogManualAdapter.InterfaceListener {
             override fun onDeleteClick(position: Int) {
                 if (arrayManualList.size >= limitTotalMenu) {
-                    this@HomeActivity.toast("maximum reached")
+                    this@HomeActivity.toast(getString(R.string.max_reached))
                     menuManualBinding.inputMenuSection.apply {
                         this.visibility = View.VISIBLE
                         this.animate().alpha(1f).duration = 200
@@ -342,7 +338,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                             startActivityForResult(this, FROM_DETAIL)
                         }
                     }
-                    else -> this.toast("You haven't eat anything yet?")
+                    else -> this.toast(getString(R.string.havent_eat))
                 }
             }
         }
@@ -434,7 +430,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         if (check) {
-            this.toast("Menu $text sudah ada.")
+            this.toast(getString(R.string.menu_already, text))
             return false
         } else {
             arrayMenuList.add(MenuListEntity(text.toString(), 1))
@@ -450,7 +446,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 this.visibility = View.INVISIBLE
                 this.animate().alpha(0f).duration = 200
             }
-            this.toast("maximum menu reached")
+            this.toast(getString(R.string.max_reached))
         }
         return true
     }

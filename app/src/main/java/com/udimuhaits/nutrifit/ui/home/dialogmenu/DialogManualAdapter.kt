@@ -3,6 +3,7 @@ package com.udimuhaits.nutrifit.ui.home.dialogmenu
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ItemMenuManualBinding
 import com.udimuhaits.nutrifit.utils.toast
@@ -56,7 +57,7 @@ class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupView
                 imageButton2.setOnClickListener {
                     val increaseValue = listManualEntity.value + 1
                     if (increaseValue > 10) {
-                        root.context.toast("maximum porsi")
+                        root.context.toast(itemView.context.getString(R.string.max_portion))
                     } else {
                         dataChangeListener.onValueChange(
                             adapterPosition, listManualEntity.name, increaseValue
@@ -67,7 +68,7 @@ class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupView
                 imageButton3.setOnClickListener {
                     val decreaseValue = listManualEntity.value - 1
                     if (decreaseValue < 1) {
-                        root.context.toast("minimum portion is 1")
+                        root.context.toast(itemView.context.getString(R.string.min_portion))
                     } else {
                         dataChangeListener.onValueChange(
                             adapterPosition, listManualEntity.name, decreaseValue

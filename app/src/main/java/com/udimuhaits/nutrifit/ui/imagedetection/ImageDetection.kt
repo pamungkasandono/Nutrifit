@@ -13,7 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -72,26 +71,25 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         val whatIChoose = intent.extras?.getInt("youChoose")
         when (whatIChoose) {
             HomeActivity.PICK_IMAGE -> {
-                this.toast("pick")
-                imageBinding.retakeButton.text = "Change Image"
-                imageBinding.title.text = "Chosen Image"
+                this.toast(getString(R.string.pick))
+                imageBinding.retakeButton.text = getString(R.string.change_image)
+                imageBinding.title.text = getString(R.string.choose_image)
                 isTakePicture = false
                 chooseImage()
             }
             HomeActivity.TAKE_PICTURE -> {
-                this.toast("take")
-                imageBinding.retakeButton.text = "Retake Picture"
-                imageBinding.title.text = "Taken Picture"
+                this.toast(getString(R.string.take))
+                imageBinding.retakeButton.text = getString(R.string.retake_picture)
+                imageBinding.title.text = getString(R.string.taken_picture)
                 isTakePicture = true
                 takePicture()
             }
         }
-        this.toast(whatIChoose.toString())
 
         imageBinding.retakeButton.setOnClickListener {
             if (isTakePicture) {
-                this.areYouSure("Retake the picture?").apply {
-                    setButton(AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+                this.areYouSure(getString(R.string.question_retake_picture)).apply {
+                    setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                         imageMenuList.clear()
                         manualMenuList.clear()
                         arrTempName.clear()
@@ -102,8 +100,8 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     show()
                 }
             } else {
-                this.areYouSure("To change the image?").apply {
-                    setButton(AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+                this.areYouSure(getString(R.string.question_change_image)).apply {
+                    setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                         imageMenuList.clear()
                         manualMenuList.clear()
                         arrTempName.clear()
@@ -117,8 +115,8 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         }
 
         imageBinding.backButton.setOnClickListener {
-            this.areYouSure("Close this session will delete your list").apply {
-                setButton(AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+            this.areYouSure(getString(R.string.close_session)).apply {
+                setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                     Intent().apply {
                         this.putExtra("isSuccess", true)
                         setResult(RESULT_OK, this)
@@ -130,7 +128,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         }
 
         imageBinding.checkButton.setOnClickListener {
-            this.toast("add list")
+            this.toast(getString(R.string.add_list))
             imageMenuDialog(imageMenuList)
         }
     }
@@ -159,7 +157,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         val token = this.userPreference().getString("token", "")
 
         if (token == "") {
-            this.toast("Token kosong")
+            this.toast("Token is empty")
         }
 
         NutrifitApiConfig.getNutrifitApiService(token).uploadImage(
@@ -196,7 +194,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                     }
                     imageListAdapter.notifyDataSetChanged()
                 } else {
-                    responsePrediction = "No food detected"
+                    responsePrediction = getString(R.string.no_food_detected)
                 }
                 imageBinding.result.text =
                     resources.getString(R.string.str_result_s, responsePrediction)
@@ -246,7 +244,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         imageMenuDialog = dialogBuilder.create()
         imageMenuDialog.apply {
             setCanceledOnTouchOutside(false)
-            setTitle("Semua sudah terlist?")
+            setTitle(getString(R.string.already_listed))
             show()
         }
 
@@ -262,7 +260,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         popupAdapter.notifyDataSetChanged()
 
         if (menuData.size < 1) {
-            this.toast("No data on image.")
+            this.toast(getString(R.string.no_data_image))
         }
 
         // set disable state
@@ -327,7 +325,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         popupAdapter.setOnDeleteListener(object : DialogManualAdapter.InterfaceListener {
             override fun onDeleteClick(position: Int) {
                 if (manualMenuList.size >= limitMenuItem) {
-                    this@ImageDetection.toast("now max")
+                    this@ImageDetection.toast(getString(R.string.now_max))
                     menuImageBinding.inputMenuSection.apply {
                         this.visibility = View.VISIBLE
                         this.animate().alpha(1f).duration = 200
@@ -378,7 +376,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                             finish()
                         }
                     }
-                    else -> this.toast("You haven't eat anything yet?")
+                    else -> this.toast(getString(R.string.havent_eat))
                 }
                 imageMenuDialog.dismiss()
             }
@@ -452,14 +450,14 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         for (matchName in menuData) {
             if (matchName.name == text.toString()) {
                 check = true
-                this@ImageDetection.toast("Di list, $text sudah ada.")
+                this@ImageDetection.toast(getString(R.string.food_already_list, text))
                 break
             }
         }
         for (matchName in manualMenuList) {
             if (matchName.name == text.toString()) {
                 check = true
-                this@ImageDetection.toast("Anda sudah menambahkan $text.")
+                this@ImageDetection.toast(getString(R.string.fodd_already_add, text))
                 break
             }
         }
@@ -483,7 +481,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                 this.visibility = View.INVISIBLE
                 this.animate().alpha(0f).duration = 200
             }
-            this.toast("maximum menu reached")
+            this.toast(getString(R.string.max_menu_reached))
         }
         return true
     }
@@ -553,8 +551,8 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
     }
 
     override fun onBackPressed() {
-        this.areYouSure("Close this session will delete your list").apply {
-            setButton(AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+        this.areYouSure(getString(R.string.close_session)).apply {
+            setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                 Intent().apply {
                     if (historySaved) {
                         this.putExtra("isSuccess", true)

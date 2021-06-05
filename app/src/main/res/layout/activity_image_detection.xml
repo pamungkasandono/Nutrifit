@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
-        android:text="Check"
+        android:text="@string/check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -47,7 +47,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginBottom="32dp"
         android:background="?android:attr/selectableItemBackground"
-        android:text="Retake image"
+        android:text="@string/retake_image"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
-        android:text="TAKEN PICTURE"
+        android:text="@string/taken_picture"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -101,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Please wait..."
+            android:text="@string/please_wait"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold|italic" />

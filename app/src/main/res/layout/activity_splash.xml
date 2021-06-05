@@ -26,10 +26,10 @@
             android:id="@+id/tv_splash_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/checking_food_nutrition_made_easy"
             android:fontFamily="@font/robotothin"
-            android:textSize="16sp"
-            android:textColor="@color/white"/>
+            android:text="@string/checking_food_nutrition_made_easy"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

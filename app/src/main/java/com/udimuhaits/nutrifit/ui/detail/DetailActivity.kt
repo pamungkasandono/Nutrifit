@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -56,13 +55,12 @@ class DetailActivity : AppCompatActivity() {
         setContentView(detailBinding.root)
 
         detailBinding.fabOption1.setOnClickListener {
-            this.toast("You remove this menu from history.")
+            this.toast(getString(R.string.remove_menu_history))
             saveIt = false
             detailBinding.fab.collapse()
         }
 
         detailBinding.fabOption2.setOnClickListener {
-            this.toast("Option 2 - back to home and then open image dialog")
             Intent(this, HomeActivity::class.java).apply {
                 putExtra("fab_code", "image")
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -76,7 +74,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         detailBinding.fabOption3.setOnClickListener {
-            this.toast("Option 3 - back to home and then open alert dialog")
             Intent(this, HomeActivity::class.java).apply {
                 putExtra("fab_code", "manual")
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -146,7 +143,7 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalServing)
                         )
                         this.totalServing.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Serving")
+                            this@DetailActivity.toastLong(getString(R.string.value_serving))
                         }
                     }
                     this.totalCalories.post {
@@ -155,7 +152,7 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalCalories)
                         )
                         this.totalCalories.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Calories")
+                            this@DetailActivity.toastLong(getString(R.string.value_calories))
                         }
                     }
                     this.totalCarbo.post {
@@ -164,7 +161,7 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalCarbo)
                         )
                         this.totalCarbo.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Carbo")
+                            this@DetailActivity.toastLong(getString(R.string.value_carbo))
                         }
                     }
                     this.totalProtein.post {
@@ -173,7 +170,7 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalProtein)
                         )
                         this.totalProtein.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Protein")
+                            this@DetailActivity.toastLong(getString(R.string.value_protein))
                         }
                     }
                     this.totalFat.post {
@@ -182,7 +179,7 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalFat)
                         )
                         this.totalFat.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Fat")
+                            this@DetailActivity.toastLong(getString(R.string.value_fat))
                         }
                     }
                     this.totalCholesterol.post {
@@ -191,11 +188,10 @@ class DetailActivity : AppCompatActivity() {
                             String.format("%.1f", this@DetailActivity.totalCholesterol)
                         )
                         this.totalCholesterol.setOnClickListener {
-                            this@DetailActivity.toastLong("This values is total Cholesterol")
+                            this@DetailActivity.toastLong(getString(R.string.value_cholesterol))
                         }
                     }
                 }
-
             }
         }
 
@@ -208,8 +204,8 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (!isProsesLoadData) {
-            this.areYouSure("Go back to home?").apply {
-                setButton(AlertDialog.BUTTON_POSITIVE, "OK") { _, _ ->
+            this.areYouSure(getString(R.string.go_back_home)).apply {
+                setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                     if (saveIt) {
                         saveToHistory()
                         newDataUpdated = true
@@ -224,7 +220,7 @@ class DetailActivity : AppCompatActivity() {
                 show()
             }
         } else {
-            this.toast("Please wait.")
+            this.toast(getString(R.string.please_wait))
         }
     }
 

@@ -177,7 +177,7 @@ class FormInputActivity : AppCompatActivity() {
         )[FormViewModel::class.java]
 
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.dialog_title)
+        builder.setTitle(R.string.save_profile)
         builder.setMessage(R.string.message_save)
         builder.setIcon(R.drawable.ic_save)
         builder.setPositiveButton(R.string.yes) { dialogInterface, which ->

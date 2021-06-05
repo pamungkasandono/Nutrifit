@@ -37,12 +37,12 @@
         android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="1"
         android:textAlignment="center"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageButton3"
         app:layout_constraintEnd_toStartOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="@+id/imageButton3" />
+        app:layout_constraintTop_toTopOf="@+id/imageButton3"
+        tools:text="1" />
 
     <ImageButton
         android:id="@+id/imageButton3"

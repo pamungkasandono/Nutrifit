@@ -29,7 +29,18 @@ class DetailViewModel : ViewModel() {
                     for (data in response.body()?.items!!) {
                         with(data) {
                             val food = CNEntity(
-                                name, sodiumMg, sugarG, fatTotalG, cholesterolMg, proteinG, fiberG, servingSizeG, calories, fatSaturatedG, carbohydratesTotalG, potassiumMg
+                                name,
+                                sodiumMg,
+                                sugarG,
+                                fatTotalG,
+                                cholesterolMg,
+                                proteinG,
+                                fiberG,
+                                servingSizeG,
+                                calories,
+                                fatSaturatedG,
+                                carbohydratesTotalG,
+                                potassiumMg
                             )
                             calNinList.addAll(listOf(food))
                         }
@@ -39,8 +50,8 @@ class DetailViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<CalorieNinjasResponse>, t: Throwable) {
-                Log.d("asdasd Error T", t.message.toString())
-                Log.d("asdasd Error call", call.toString())
+                Log.d("  Error T", t.message.toString())
+                Log.d("  Error call", call.toString())
             }
         })
         return _modelResponseCN
