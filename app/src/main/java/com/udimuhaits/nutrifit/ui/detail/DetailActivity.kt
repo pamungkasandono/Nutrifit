@@ -5,8 +5,8 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.udimuhaits.nutrifit.R
@@ -32,6 +32,7 @@ class DetailActivity : AppCompatActivity() {
     private var isProsesLoadData = true
     private var saveIt = true
     private var newDataUpdated = false
+    private val detailViewModel: DetailViewModel by viewModels()
 
     private var totalServing = 0F
     private var totalCalories = 0F
@@ -62,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
         detailBinding.fabOption2.setOnClickListener {
             Intent(this, HomeActivity::class.java).apply {
                 putExtra("fab_code", "image")
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(this)
                 if (saveIt) {
                     saveToHistory()
@@ -75,7 +76,7 @@ class DetailActivity : AppCompatActivity() {
         detailBinding.fabOption3.setOnClickListener {
             Intent(this, HomeActivity::class.java).apply {
                 putExtra("fab_code", "manual")
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(this)
                 if (saveIt) {
                     saveToHistory()
@@ -86,11 +87,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         val detailAdapter = DetailAdapter()
-
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[DetailViewModel::class.java]
 
         val intentData = intent.extras
         val query = intentData?.getString(QUERY)
@@ -109,7 +105,7 @@ class DetailActivity : AppCompatActivity() {
 
         detailBinding.progressBar1.visibility = View.VISIBLE
         if (query != null) {
-            viewModel.getListFood(query).observe(this) {
+            detailViewModel.getListFood(query).observe(this) {
                 if (it.isEmpty()) {
                     detailBinding.fabOption1.visibility = View.GONE
                     saveIt = false
@@ -201,28 +197,6 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        if (!isProsesLoadData) {
-            this.areYouSure(getString(R.string.go_back_home)).apply {
-                setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
-                    if (saveIt) {
-                        saveToHistory()
-                        newDataUpdated = true
-                    }
-                    Intent().apply {
-                        this.putExtra("isSuccess", newDataUpdated)
-                        setResult(RESULT_OK, this)
-                    }
-                    arrayData.clear()
-                    finish()
-                }
-                show()
-            }
-        } else {
-            this.toast(getString(R.string.please_wait))
-        }
-    }
-
     private fun saveToHistory() {
         val foodDataDailyConsumptionItem = ArrayList<FoodDataDailyConsumptionItem>()
         val failedFoodData = ArrayList<FoodDataDailyConsumptionItem>()
@@ -285,7 +259,7 @@ class DetailActivity : AppCompatActivity() {
                 call: Call<List<FoodDataDailyConsumptionItem>>,
                 response: Response<List<FoodDataDailyConsumptionItem>>
             ) {
-                this@DetailActivity.toastLong("List added")
+                this@DetailActivity.toastLong(getString(R.string.list_add))
             }
 
             override fun onFailure(
@@ -294,5 +268,27 @@ class DetailActivity : AppCompatActivity() {
                 this@DetailActivity.toast(t.message.toString())
             }
         })
+    }
+
+    override fun onBackPressed() {
+        if (!isProsesLoadData) {
+            this.areYouSure(getString(R.string.go_back_home)).apply {
+                setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
+                    if (saveIt) {
+                        saveToHistory()
+                        newDataUpdated = true
+                    }
+                    Intent().apply {
+                        this.putExtra("isSuccess", newDataUpdated)
+                        setResult(RESULT_OK, this)
+                    }
+                    arrayData.clear()
+                    finish()
+                }
+                show()
+            }
+        } else {
+            this.toast(getString(R.string.please_wait))
+        }
     }
 }

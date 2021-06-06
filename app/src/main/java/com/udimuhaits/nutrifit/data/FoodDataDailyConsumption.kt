@@ -2,11 +2,6 @@ package com.udimuhaits.nutrifit.data
 
 import com.google.gson.annotations.SerializedName
 
-data class FoodDataDailyConsumption(
-    @field:SerializedName("FoodDataDailyConsumption")
-    val foodDataDailyConsumption: List<FoodDataDailyConsumptionItem>
-)
-
 data class FoodDataDailyConsumptionItem(
 
     @field:SerializedName("food_name")

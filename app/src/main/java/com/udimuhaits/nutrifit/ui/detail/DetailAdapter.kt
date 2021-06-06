@@ -11,7 +11,6 @@ import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.data.CNEntity
 import com.udimuhaits.nutrifit.databinding.ItemListFoodBinding
 
-
 class DetailAdapter : RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
     private var mCNEntity = ArrayList<CNEntity>()
 

@@ -10,8 +10,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -35,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var gsc: GoogleSignInClient
     private lateinit var fAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val formViewModel: FormViewModel by viewModels()
     private var isBackPressed = false
 
     private val bottomAnimation: Animation by lazy {
@@ -126,23 +128,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkProfile() {
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[LoginViewModel::class.java]
-
-        val viewModelForm = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[FormViewModel::class.java]
-
         val account = fAuth.currentUser
         val aUsername = account?.displayName
         val aEmail = account?.email
         val aProfilePic = account?.photoUrl
 
-        viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
-            viewModelForm.getUser(users.accessToken, users.userId).observe(this, { data ->
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            formViewModel.getUser(users.accessToken, users.userId).observe(this, { data ->
                 if (data.birthDate != null || data.height != null || data.weight != null) {
                     navigateToHome()
                 } else {

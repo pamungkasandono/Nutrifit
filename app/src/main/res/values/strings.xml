@@ -128,4 +128,5 @@
     <string name="dont_save_history">Don\'t save history</string>
     <string name="pick_or_take">Pick or Take another picture</string>
     <string name="add_another_menu">Add Another Menu</string>
+    <string name="list_add">List added</string>
 </resources>

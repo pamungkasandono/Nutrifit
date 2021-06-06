@@ -20,7 +20,7 @@ class UploadRequestBody(
     }
 
     override fun contentType(): MediaType? {
-        return "$contentType".toMediaTypeOrNull()
+        return contentType.toMediaTypeOrNull()
     }
 
     override fun contentLength(): Long {

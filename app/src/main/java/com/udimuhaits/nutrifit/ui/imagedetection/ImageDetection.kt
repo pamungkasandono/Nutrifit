@@ -15,9 +15,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.data.ResponseImageML
@@ -28,6 +30,7 @@ import com.udimuhaits.nutrifit.ui.detail.DetailActivity
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
 import com.udimuhaits.nutrifit.ui.home.dialogmenu.DialogManualAdapter
 import com.udimuhaits.nutrifit.ui.imagedetection.dialogmenu.ImageListAdapter
+import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.utils.*
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -57,6 +60,8 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
     private val arrTempName = arrayListOf<String>()
     private val alreadyData = arrayListOf<String>()
     private lateinit var alertDialog: AlertDialog
+    private val loginViewModel: LoginViewModel by viewModels()
+    private lateinit var fAuth: FirebaseAuth
     private var historySaved = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +69,13 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         imageBinding = ActivityImageDetectionBinding.inflate(layoutInflater)
         setContentView(imageBinding.root)
 
+        fAuth = FirebaseAuth.getInstance()
+
         forcePortrait(this)
 
         alertDialog = AlertDialog.Builder(this).create()
 
-        val whatIChoose = intent.extras?.getInt("youChoose")
-        when (whatIChoose) {
+        when (intent.extras?.getInt("youChoose")) {
             HomeActivity.PICK_IMAGE -> {
                 this.toast(getString(R.string.pick))
                 imageBinding.retakeButton.text = getString(R.string.change_image)
@@ -154,62 +160,63 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
         layerVisibility(true)
         val body = UploadRequestBody(file, "image", this)
 
-        val token = this.userPreference().getString("token", "")
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
 
-        if (token == "") {
-            this.toast("Token is empty")
-        }
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            NutrifitApiConfig.getNutrifitApiService(users.accessToken).uploadImage(
+                MultipartBody.Part.createFormData("image_url", file.name, body)
+            ).enqueue(object : Callback<ResponseImageML> {
+                override fun onResponse(
+                    call: Call<ResponseImageML>,
+                    response: Response<ResponseImageML>
+                ) {
+                    imageBinding.progressBar.progress = 100
+                    layerVisibility(false)
+                    var responsePrediction = ""
+                    if (!response.body()?.prediction.isNullOrEmpty()) {
 
-        NutrifitApiConfig.getNutrifitApiService(token).uploadImage(
-            MultipartBody.Part.createFormData("image_url", file.name, body)
-        ).enqueue(object : Callback<ResponseImageML> {
-            override fun onResponse(
-                call: Call<ResponseImageML>,
-                response: Response<ResponseImageML>
-            ) {
-                imageBinding.progressBar.progress = 100
-                layerVisibility(false)
-                var responsePrediction = ""
-                if (!response.body()?.prediction.isNullOrEmpty()) {
-
-                    for (predict in response.body()?.prediction!!) {
-                        alreadyData.add(predict.name)
-                    }
-
-                    var asd = ""
-                    var comma = ""
-                    for (filterData in alreadyData.sorted()) {
-                        if (filterData == asd) {
-                            val i = arrTempName.indexOf(asd)
-                            var getValue = imageMenuList[i].value
-                            getValue += 1
-                            imageMenuList[i] = MenuListEntity(asd, getValue, true)
-                        } else {
-                            asd = filterData
-                            responsePrediction += "$comma $asd"
-                            comma = ", "
-                            arrTempName.add(asd)
-                            imageMenuList.add(MenuListEntity(asd, 1, true))
+                        for (predict in response.body()?.prediction!!) {
+                            alreadyData.add(predict.name)
                         }
+
+                        var asd = ""
+                        var comma = ""
+                        for (filterData in alreadyData.sorted()) {
+                            if (filterData == asd) {
+                                val i = arrTempName.indexOf(asd)
+                                var getValue = imageMenuList[i].value
+                                getValue += 1
+                                imageMenuList[i] = MenuListEntity(asd, getValue, true)
+                            } else {
+                                asd = filterData
+                                responsePrediction += "$comma $asd"
+                                comma = ", "
+                                arrTempName.add(asd)
+                                imageMenuList.add(MenuListEntity(asd, 1, true))
+                            }
+                        }
+                        imageListAdapter.notifyDataSetChanged()
+                    } else {
+                        responsePrediction = getString(R.string.no_food_detected)
                     }
-                    imageListAdapter.notifyDataSetChanged()
-                } else {
-                    responsePrediction = getString(R.string.no_food_detected)
+                    imageBinding.result.text =
+                        resources.getString(R.string.str_result_s, responsePrediction)
+
+                    imagePath = response.body()?.imageProperty?.imageUrl.toString()
+                    imageID = response.body()?.imageProperty?.id.toString()!!
                 }
-                imageBinding.result.text =
-                    resources.getString(R.string.str_result_s, responsePrediction)
 
-                imagePath = response.body()?.imageProperty?.imageUrl.toString()
-                imageID = response.body()?.imageProperty?.id.toString()!!
-            }
-
-            override fun onFailure(call: Call<ResponseImageML>, t: Throwable) {
-                this@ImageDetection.toast(t.message.toString())
-            }
+                override fun onFailure(call: Call<ResponseImageML>, t: Throwable) {
+                    this@ImageDetection.toast(t.message.toString())
+                }
+            })
         })
     }
 
-    fun layerVisibility(visible: Boolean) {
+    private fun layerVisibility(visible: Boolean) {
         with(imageBinding) {
             if (visible) {
                 linearLayoutLayer.visibility = View.VISIBLE

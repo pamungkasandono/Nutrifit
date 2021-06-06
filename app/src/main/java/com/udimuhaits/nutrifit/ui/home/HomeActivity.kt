@@ -17,10 +17,10 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -61,8 +61,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var dialogAddManual: AlertDialog
     private var setDisabledState: Boolean = false
     private var clicked = false
-    private lateinit var viewModel: HistoryViewModel
     private val historyAdapter = HistoryAdapter()
+    private val historyViewModel: HistoryViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private val fromBottom: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -84,6 +85,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         fAuth = FirebaseAuth.getInstance()
 
+        getImageFromForm()
+
+        getImageFromLogin()
+
+        forcePortrait(this)
+
         if (this.writeIsGranted()) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(
@@ -93,23 +100,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             )
         }
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[HistoryViewModel::class.java]
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
 
-        viewModel.getHistory(this).observe(this) {
-            if (it.isEmpty()) {
-                binding.textView7.visibility = View.VISIBLE
-                binding.recyclerViewHistory.visibility = View.GONE
-            } else {
-                binding.textView7.visibility = View.GONE
-                binding.recyclerViewHistory.visibility = View.VISIBLE
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            historyViewModel.getHistory(users.userId, users.accessToken).observe(this) {
+                if (it.isEmpty()) {
+                    binding.textView7.visibility = View.VISIBLE
+                    binding.recyclerViewHistory.visibility = View.GONE
+                } else {
+                    binding.textView7.visibility = View.GONE
+                    binding.recyclerViewHistory.visibility = View.VISIBLE
+                }
+
+                historyAdapter.setData(it)
+                historyAdapter.notifyDataSetChanged()
             }
-
-            historyAdapter.setData(it)
-            historyAdapter.notifyDataSetChanged()
-        }
+        })
 
         with(binding.recyclerViewHistory) {
             layoutManager = LinearLayoutManager(context)
@@ -124,12 +133,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             finish()
             startActivity(intent)
         }
-
-        getImageFromForm()
-
-        getImageFromLogin()
-
-        forcePortrait(this)
 
         binding.imgProfile.setOnClickListener {
             onAddButtonClick()
@@ -165,17 +168,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun getImageFromLogin() {
-        val viewModelLogin = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[LoginViewModel::class.java]
-
         val account = fAuth.currentUser
         val aUsername = account?.displayName
         val aEmail = account?.email
         val aProfilePic = account?.photoUrl
 
-        viewModelLogin.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
             Glide
                 .with(this)
                 .load(users.profilePic)

@@ -10,9 +10,9 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -37,6 +37,8 @@ class FormInputActivity : AppCompatActivity() {
     private lateinit var datePickerDialog: DatePickerDialog
     private lateinit var dateFormatter: SimpleDateFormat
     private lateinit var sharedPreferences: SharedPreferences
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val formViewModel: FormViewModel by viewModels()
     private var isBackPressed = false
 
     @SuppressLint("SimpleDateFormat")
@@ -65,20 +67,12 @@ class FormInputActivity : AppCompatActivity() {
         val aEmail = account?.email
         val aProfilePic = account?.photoUrl
 
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[LoginViewModel::class.java]
-
-        viewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
-
-            // set token to prefrence
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
             this.userPreference().edit().apply {
                 putString("token", users.accessToken.toString())
                 users.userId?.let { putInt("user_id", it) }
                 apply()
             }
-
             users.apply {
                 binding.edtUsername.setText(username)
                 binding.edtEmail.setText(email)
@@ -88,7 +82,7 @@ class FormInputActivity : AppCompatActivity() {
                     .into(binding.imgProfile)
             }
 
-            viewModel.getUser(users.accessToken).observe(this, { body ->
+            loginViewModel.getUser(users.accessToken).observe(this, { body ->
                 body.apply {
                     Toast.makeText(applicationContext, detail, Toast.LENGTH_SHORT).show()
                     Toast.makeText(applicationContext, status, Toast.LENGTH_SHORT).show()
@@ -120,7 +114,7 @@ class FormInputActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.isLoading.observe(this, { loading ->
+        loginViewModel.isLoading.observe(this, { loading ->
             binding.progressBar.visibility =
                 if (loading) android.view.View.VISIBLE else android.view.View.GONE
         })
@@ -171,11 +165,6 @@ class FormInputActivity : AppCompatActivity() {
         weight: Double?,
         imageProfile: String?
     ) {
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[FormViewModel::class.java]
-
         val builder = AlertDialog.Builder(this)
         builder.setTitle(R.string.save_profile)
         builder.setMessage(R.string.message_save)
@@ -189,7 +178,7 @@ class FormInputActivity : AppCompatActivity() {
                     getString(R.string.start_your_better_live_journey),
                     Toast.LENGTH_SHORT
                 ).show()
-                viewModel.putUser(userId, token, birthDate, height, weight)
+                formViewModel.putUser(userId, token, birthDate, height, weight)
                 sharedPreferences =
                     applicationContext.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
                 sharedPreferences.edit().apply {

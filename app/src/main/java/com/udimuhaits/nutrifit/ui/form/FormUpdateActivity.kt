@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
@@ -24,6 +24,8 @@ class FormUpdateActivity : AppCompatActivity() {
     private lateinit var fAuth: FirebaseAuth
     private lateinit var datePickerDialog: DatePickerDialog
     private lateinit var dateFormatter: SimpleDateFormat
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val formViewModel: FormViewModel by viewModels()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,23 +46,13 @@ class FormUpdateActivity : AppCompatActivity() {
     }
 
     private fun putAndGetUser() {
-        val viewModelForm = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[FormViewModel::class.java]
-
-        val viewModelLogin = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[LoginViewModel::class.java]
-
         val account = fAuth.currentUser
         val aUsername = account?.displayName
         val aEmail = account?.email
         val aProfilePic = account?.photoUrl
 
-        viewModelLogin.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
-            viewModelForm.getUser(users.accessToken, users.userId).observe(this, { update ->
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            formViewModel.getUser(users.accessToken, users.userId).observe(this, { update ->
                 Glide
                     .with(this)
                     .load(update.profilePic)
@@ -76,7 +68,7 @@ class FormUpdateActivity : AppCompatActivity() {
                 val birthDate = binding.edtDate.text.toString()
                 val height = binding.edtHeight.text.toString()
                 val weight = binding.edtWeight.text.toString()
-                viewModelForm.putUser(
+                formViewModel.putUser(
                     users.userId,
                     users.accessToken,
                     birthDate,
@@ -89,7 +81,7 @@ class FormUpdateActivity : AppCompatActivity() {
                     .show()
             }
         })
-        viewModelForm.isLoading.observe(this, { loading ->
+        formViewModel.isLoading.observe(this, { loading ->
             binding.progressBar.visibility =
                 if (loading) android.view.View.VISIBLE else android.view.View.GONE
         })

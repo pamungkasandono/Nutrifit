@@ -16,9 +16,7 @@ class DetailViewModel : ViewModel() {
     private val _modelResponseCN = MutableLiveData<List<CNEntity>>()
 
     fun getListFood(query: String): LiveData<List<CNEntity>> {
-
         val clint = NutrifitApiConfig.getCNApiService().getSearchResult(query)
-
         clint.enqueue(object : Callback<CalorieNinjasResponse> {
             override fun onResponse(
                 call: Call<CalorieNinjasResponse>,
