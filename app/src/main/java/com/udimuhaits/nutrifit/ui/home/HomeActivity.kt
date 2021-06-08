@@ -3,9 +3,7 @@ package com.udimuhaits.nutrifit.ui.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -46,7 +44,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         const val FROM_IMAGE_DETECTION = 200
         const val PICK_IMAGE = 201
         const val TAKE_PICTURE = 202
-        const val PREFS_HOME = "sharedPrefHome"
     }
 
     private lateinit var binding: ActivityHomeBinding
@@ -55,7 +52,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private val limitTotalMenu = 15
     private lateinit var menuManualBinding: DialogMenuManualBinding
     private lateinit var fAuth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
     private val dialogManualAdapter = DialogManualAdapter()
     private lateinit var dialogImageOption: AlertDialog
     private lateinit var dialogAddManual: AlertDialog
@@ -85,11 +81,16 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         fAuth = FirebaseAuth.getInstance()
 
-        getImageFromForm()
+        val account = fAuth.currentUser
+        val aUsername = account?.displayName
+        val aEmail = account?.email
+        val aProfilePic = account?.photoUrl
 
-        getImageFromLogin()
+        getImageFromLogin(aUsername, aEmail, aProfilePic.toString())
 
         forcePortrait(this)
+
+        getHistory(aUsername, aEmail, aProfilePic.toString())
 
         if (this.writeIsGranted()) {
             ActivityCompat.requestPermissions(
@@ -98,40 +99,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ), 10
             )
-        }
-
-        val account = fAuth.currentUser
-        val aUsername = account?.displayName
-        val aEmail = account?.email
-        val aProfilePic = account?.photoUrl
-
-        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
-            historyViewModel.getHistory(users.userId, users.accessToken).observe(this) {
-                if (it.isEmpty()) {
-                    binding.textView7.visibility = View.VISIBLE
-                    binding.recyclerViewHistory.visibility = View.GONE
-                } else {
-                    binding.textView7.visibility = View.GONE
-                    binding.recyclerViewHistory.visibility = View.VISIBLE
-                }
-
-                historyAdapter.setData(it)
-                historyAdapter.notifyDataSetChanged()
-            }
-        })
-
-        with(binding.recyclerViewHistory) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = historyAdapter
-        }
-
-        binding.refreshHistory.setOnRefreshListener {
-            arrayMenuList.clear()
-            dialogManualAdapter.setData(arrayMenuList)
-            dialogManualAdapter.notifyDataSetChanged()
-            finish()
-            startActivity(intent)
         }
 
         binding.imgProfile.setOnClickListener {
@@ -167,28 +134,44 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun getImageFromLogin() {
-        val account = fAuth.currentUser
-        val aUsername = account?.displayName
-        val aEmail = account?.email
-        val aProfilePic = account?.photoUrl
+    private fun getHistory(aUsername: String?, aEmail: String?, aProfilePic: String?) {
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic).observe(this, { users ->
+            historyViewModel.getHistory(users.userId, users.accessToken).observe(this) {
+                if (it.isEmpty()) {
+                    binding.textView7.visibility = View.VISIBLE
+                    binding.recyclerViewHistory.visibility = View.GONE
+                } else {
+                    binding.textView7.visibility = View.GONE
+                    binding.recyclerViewHistory.visibility = View.VISIBLE
+                }
 
-        loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+                historyAdapter.setData(it)
+                historyAdapter.notifyDataSetChanged()
+            }
+        })
+
+        with(binding.recyclerViewHistory) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = historyAdapter
+        }
+
+        binding.refreshHistory.setOnRefreshListener {
+            arrayMenuList.clear()
+            dialogManualAdapter.setData(arrayMenuList)
+            dialogManualAdapter.notifyDataSetChanged()
+            finish()
+            startActivity(intent)
+        }
+    }
+
+    private fun getImageFromLogin(aUsername: String?, aEmail: String?, aProfilePic: String?) {
+        loginViewModel.postUser(aUsername, aEmail, aProfilePic).observe(this, { users ->
             Glide
                 .with(this)
                 .load(users.profilePic)
                 .into(binding.imgProfile)
         })
-    }
-
-    private fun getImageFromForm() {
-        sharedPreferences = this.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
-        sharedPreferences.apply {
-            val imageUser = sharedPreferences.getString("saveImage", "imageProfile")
-            Glide.with(applicationContext)
-                .load(imageUser)
-                .into(binding.imgProfile)
-        }
     }
 
     private fun onAddButtonClick() {

@@ -206,7 +206,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
                         resources.getString(R.string.str_result_s, responsePrediction)
 
                     imagePath = response.body()?.imageProperty?.imageUrl.toString()
-                    imageID = response.body()?.imageProperty?.id.toString()!!
+                    imageID = response.body()?.imageProperty?.id.toString()
                 }
 
                 override fun onFailure(call: Call<ResponseImageML>, t: Throwable) {
@@ -406,7 +406,7 @@ class ImageDetection : AppCompatActivity(), UploadRequestBody.UploadCallback, Vi
 
                     val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
                     val bm2 = BitmapFactory.decodeStream(inputStream)
-                    val fileName = contentResolver.getFileName(uriSelectedImage!!)
+                    val fileName = contentResolver.getFileName(uriSelectedImage)
                     val file = File(cacheDir, fileName)
                     val outputStream = FileOutputStream(file)
                     bm2.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)

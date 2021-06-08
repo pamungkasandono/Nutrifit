@@ -8,7 +8,7 @@ import com.udimuhaits.nutrifit.data.MenuListEntity
 import com.udimuhaits.nutrifit.databinding.ItemMenuManualBinding
 import com.udimuhaits.nutrifit.utils.toast
 
-class DialogManualAdapter() : RecyclerView.Adapter<DialogManualAdapter.PopupViewHolder>() {
+class DialogManualAdapter : RecyclerView.Adapter<DialogManualAdapter.PopupViewHolder>() {
     private val mData = ArrayList<MenuListEntity>()
     private lateinit var deleteListener: InterfaceListener
     private lateinit var dataChangeListener: InterfaceListener

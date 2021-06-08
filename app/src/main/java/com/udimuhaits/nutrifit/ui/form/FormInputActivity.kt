@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.udimuhaits.nutrifit.R
 import com.udimuhaits.nutrifit.databinding.ActivityFormInputBinding
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
-import com.udimuhaits.nutrifit.ui.home.HomeActivity.Companion.PREFS_HOME
 import com.udimuhaits.nutrifit.ui.login.LoginActivity.Companion.PREFS_STARTED
 import com.udimuhaits.nutrifit.ui.login.LoginViewModel
 import com.udimuhaits.nutrifit.utils.getAgeByBirthDate
@@ -58,7 +57,6 @@ class FormInputActivity : AppCompatActivity() {
         }
 
         setEnabledButton()
-
     }
 
     private fun postUser() {
@@ -74,11 +72,11 @@ class FormInputActivity : AppCompatActivity() {
                 apply()
             }
             users.apply {
-                binding.edtUsername.setText(username)
-                binding.edtEmail.setText(email)
+                binding.edtUsername.setText(aUsername)
+                binding.edtEmail.setText(aEmail)
                 Glide
                     .with(this@FormInputActivity)
-                    .load(profilePic)
+                    .load(aProfilePic)
                     .into(binding.imgProfile)
             }
 
@@ -98,7 +96,6 @@ class FormInputActivity : AppCompatActivity() {
                     birthDate,
                     height.toInt(),
                     weight.toDouble(),
-                    users.profilePic
                 )
 
                 val dailyCalories = (88.4 + (13.7 * weight.toInt()) + (4.8 * height.toInt())
@@ -112,11 +109,11 @@ class FormInputActivity : AppCompatActivity() {
                     apply()
                 }
             }
-        })
 
-        loginViewModel.isLoading.observe(this, { loading ->
-            binding.progressBar.visibility =
-                if (loading) android.view.View.VISIBLE else android.view.View.GONE
+            loginViewModel.isLoading.observe(this, { loading ->
+                binding.progressBar.visibility =
+                    if (loading) android.view.View.VISIBLE else android.view.View.GONE
+            })
         })
     }
 
@@ -163,7 +160,6 @@ class FormInputActivity : AppCompatActivity() {
         birthDate: String?,
         height: Int?,
         weight: Double?,
-        imageProfile: String?
     ) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(R.string.save_profile)
@@ -179,16 +175,12 @@ class FormInputActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 formViewModel.putUser(userId, token, birthDate, height, weight)
-                sharedPreferences =
-                    applicationContext.getSharedPreferences(PREFS_HOME, Context.MODE_PRIVATE)
-                sharedPreferences.edit().apply {
-                    putString("saveImage", imageProfile)
-                    val intent = Intent(applicationContext, HomeActivity::class.java)
-                    intent.putExtra("imageProfile", imageProfile)
-                    startActivity(intent)
-                    finish()
-                    apply()
-                }
+                val intent = Intent(applicationContext, HomeActivity::class.java)
+                intent.putExtra("userId", userId)
+                intent.putExtra("token", token)
+                startActivity(intent)
+                finish()
+
                 apply()
             }
         }

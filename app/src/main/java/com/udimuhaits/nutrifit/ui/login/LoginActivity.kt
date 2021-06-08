@@ -23,6 +23,7 @@ import com.udimuhaits.nutrifit.databinding.ActivityLoginBinding
 import com.udimuhaits.nutrifit.ui.form.FormInputActivity
 import com.udimuhaits.nutrifit.ui.form.FormViewModel
 import com.udimuhaits.nutrifit.ui.home.HomeActivity
+import com.udimuhaits.nutrifit.utils.userPreference
 
 class LoginActivity : AppCompatActivity() {
 
@@ -76,13 +77,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         fAuth = FirebaseAuth.getInstance()
-        val fUser = fAuth.currentUser
-
-        if (fUser != null) {
-            val intent =
-                Intent(this, FormInputActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -134,6 +128,11 @@ class LoginActivity : AppCompatActivity() {
         val aProfilePic = account?.photoUrl
 
         loginViewModel.postUser(aUsername, aEmail, aProfilePic.toString()).observe(this, { users ->
+            this.userPreference().edit().apply {
+                putString("token", users.accessToken.toString())
+                users.userId?.let { putInt("user_id", it) }
+                apply()
+            }
             formViewModel.getUser(users.accessToken, users.userId).observe(this, { data ->
                 if (data.birthDate != null || data.height != null || data.weight != null) {
                     navigateToHome()

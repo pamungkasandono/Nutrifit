@@ -44,6 +44,10 @@ class HistoryActivity : AppCompatActivity() {
 
         barChart = findViewById(R.id.chart)
 
+        historyAdapter()
+    }
+
+    private fun historyAdapter() {
         dailyCalories = this.userPreference().getFloat("dailyCalories", 10F)
 
         val intentData = intent.extras?.getString("date")
@@ -61,7 +65,6 @@ class HistoryActivity : AppCompatActivity() {
                 R.string.string_your_daily_calories_is_s_kcal,
                 dailyCalories.toString()
             )
-
         val historyDetailAdapter = HistoryDetailAdapter()
 
         val account = fAuth.currentUser
